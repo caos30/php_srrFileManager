@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  ****************************************************************/
 
 ini_set('display_errors', 'On');
-
+error_reporting(E_ALL);
 
 // users list:
 $config                     = array();
@@ -49,8 +49,8 @@ $config['version']          = '1.0';
 $config['a_users']          = array();
 $config['a_users']['admin'] = array('user'=> 'admin', 'pass'=> '1234', 'filefolder'=> './');
 
-$adminfile        = $_SERVER['SCRIPT_NAME'];
-$config['SEARCH'] = array('scanned_files'=> 0, 'a_found'=> array());
+$config['adminfile']        = $_SERVER['SCRIPT_NAME'];
+$config['SEARCH']           = array('scanned_files'=> 0, 'a_found'=> array());
 
 /* ************************************************************** */
 /*								SKINS & STYLES
@@ -492,22 +492,31 @@ switch ($lang) {
 /* Looks for cookies. Yum.                                      */
 /****************************************************************/
 
-if (!isset($config['a_users'][$_COOKIE['user']]) || md5($config['a_users'][$_COOKIE['user']]['pass']) != $_COOKIE['pass']) {
-    if (isset($config['a_users'][$_REQUEST['user']]) && $config['a_users'][$_REQUEST['user']]['pass'] == $_REQUEST['pass']) {
-        setcookie('user', $_REQUEST['user'], time() + 60 * 60 * 24 * 1);
-        setcookie('pass', md5($config['a_users'][$_REQUEST['user']]['pass']), time() + 60 * 60 * 24 * 1);
-        $config['user'] = $_REQUEST['user'];
-    } else {
-        if (isset($config['a_users'][$_REQUEST['user']]) || $_REQUEST['pass']) $er = true;
-        login($er);
+    if (isset($_REQUEST['user'])){
+        // try login
+        if (isset($config['a_users'][$_REQUEST['user']]) 
+                && $config['a_users'][$_REQUEST['user']]['pass'] == $_REQUEST['pass']){
+            setcookie('user', $_REQUEST['user'], time() + 60 * 60 * 24 * 1);
+            setcookie('pass', md5($config['a_users'][$_REQUEST['user']]['pass']), time() + 60 * 60 * 24 * 1);
+            $config['user'] = $_REQUEST['user'];
+        }else{
+            login(true);
+        }
+           
+    }else if (isset($_COOKIE['user'])){
+        // once inside
+        if (md5($config['a_users'][$_COOKIE['user']]['pass']) != $_COOKIE['pass'])
+            login(true);
+    }else{
+        // first visit
+        login();
     }
-}
 
 /* ************************************************************** */
 
-$op     = (isset($_POST['op'])) ? $_POST['op'] : (($_GET['op']) ? $_GET['op'] : $_REQUEST['op']);
-$folder = (isset($_POST['folder'])) ? $_POST['folder'] : (($_GET['folder']) ? $_GET['folder'] : $_REQUEST['folder']);
-$user   = (isset($_COOKIE['user'])) ? $_COOKIE['user'] : $_POST['user'];
+$op     = (isset($_POST['op'])) ? $_POST['op'] : ((isset($_GET['op'])) ? $_GET['op'] : ((isset($_REQUEST['op']))?$_REQUEST['op']:""));
+$folder = (isset($_POST['folder'])) ? $_POST['folder'] : ((isset($_GET['folder'])) ? $_GET['folder'] : ((isset($_REQUEST['folder']))?$_REQUEST['folder']:""));
+$user   = (isset($_COOKIE['user'])) ? $_COOKIE['user'] : ((isset($_POST['user']))?$_POST['user']:"");
 //while (preg_match('/\.\.\//',$folder)) $folder = preg_replace('/\.\.\//','/',$folder);
 while (preg_match('/\/\//', $folder)) $folder = preg_replace('/\/\//', '/', $folder);
 
@@ -530,6 +539,7 @@ if ($folder == '') {
 function maintop($title, $showtop = true)
 {
     global $lastsess, $login, $viewing, $user, $pass, $password, $debug, $issuper, $styles, $a_lang;
+    global $config;
     echo "<html>\n<head>\n"
         . "\n<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />"
         . "<title>" . _LANG_SITETITLE . " :: $title</title>\n"
@@ -540,18 +550,18 @@ function maintop($title, $showtop = true)
     echo "<div id='wrapper'>";
     echo "<div id='languages'>\n";
     foreach ($a_lang as $cod=> $tit)
-        echo "<a href=\"" . $adminfile . "?op=home&lang=$cod\">$tit</a>\n";
+        echo "<a href=\"" . $config['adminfile'] . "?op=home&lang=$cod\">$tit</a>\n";
     echo "</div>\n";
     echo "<h1>" . _LANG_SITETITLE . " :: $title</h1>\n";
 
     if ($showtop) {
         $var_folder = (isset($_GET['folder'])) ? '&folder=' . $_GET['folder'] : '';
         echo "<div id='top_menu'>\n"
-            . "<a href='" . $adminfile . "?op=home'>" . _LANG_BT_HOME . "</a>\n"
-            . "<a href='" . $adminfile . "?op=up$var_folder'>" . _LANG_BT_UPLOAD . "</a>\n"
-            . "<a href='" . $adminfile . "?op=cr$var_folder'>" . _LANG_BT_CREATE . "</a>\n"
-            . "<a href='" . $adminfile . "?op=search$var_folder'>" . _LANG_BT_SEARCH . "</a>\n"
-            . "<a href='" . $adminfile . "?op=logout'>" . _LANG_BT_LOGOUT . "</a>\n"
+            . "<a href='" . $config['adminfile'] . "?op=home'>" . _LANG_BT_HOME . "</a>\n"
+            . "<a href='" . $config['adminfile'] . "?op=up$var_folder'>" . _LANG_BT_UPLOAD . "</a>\n"
+            . "<a href='" . $config['adminfile'] . "?op=cr$var_folder'>" . _LANG_BT_CREATE . "</a>\n"
+            . "<a href='" . $config['adminfile'] . "?op=search$var_folder'>" . _LANG_BT_SEARCH . "</a>\n"
+            . "<a href='" . $config['adminfile'] . "?op=logout'>" . _LANG_BT_LOGOUT . "</a>\n"
             . "</div>";
     }
 
@@ -566,7 +576,7 @@ function maintop($title, $showtop = true)
 /****************************************************************/
 function login($er = false)
 {
-    global $op;
+    global $op,$config;
     setcookie("user", "", time() - 60 * 60 * 24 * 1);
     setcookie("pass", "", time() - 60 * 60 * 24 * 1);
     maintop(_LANG_TOP_LOGIN, false);
@@ -575,12 +585,12 @@ function login($er = false)
         echo "<span class='error'>" . _LANG_LOGIN_ERR . "</span><br /><br />\n";
     }
 
-    echo "<hr /><form action=\"" . $adminfile . "?op=" . $op . "\" method=\"post\">\n"
+    echo "<hr /><form action=\"" . $config['adminfile'] . "?op=" . $op . "\" method=\"post\">\n"
         . "<table id='tb_login'>\n"
         . "<tr><td class='a_r' style='width:40%;'>" . _LANG_LOGIN_USERNAME . ":</td>"
-        . "	<td class='a_l'><input type='text' name='user' value=\"" . htmlspecialchars($user) . "\"></td></tr>\n"
+        . "	<td class='a_l'><input type='text' name='user' value=\"" . ((isset($_REQUEST['user']))?htmlspecialchars($_REQUEST['user']):"") . "\"></td></tr>\n"
         . "<tr><td class='a_r'>" . _LANG_LOGIN_PASSW . ": </td>\n"
-        . "	<td class='a_l'><input type='password' name='pass' value=\"" . htmlspecialchars($pass) . "\"></td></tr>\n"
+        . "	<td class='a_l'><input type='password' name='pass' value=\"" . ((isset($_REQUEST['pass']))?htmlspecialchars($_REQUEST['pass']):"") . "\"></td></tr>\n"
         . "<tr><td>&nbsp;</td><td class='a_l'><br /><input type='submit' name='submitButtonName' value=\"" . htmlspecialchars(_LANG_LOGIN_BT) . "\"></td></tr>\n"
         . "</table>\n"
         . "</form>\n";
@@ -596,7 +606,7 @@ function login($er = false)
 /****************************************************************/
 function home()
 {
-    global $folder, $filefolder, $HTTP_HOST;
+    global $folder, $filefolder, $HTTP_HOST,$config;
     maintop(_LANG_TOP_HOME);
 
     $content1 = "";
@@ -625,20 +635,20 @@ function home()
             $perm = substr(sprintf('%o', fileperms($folder . $stylesheet)), -3);
             if (is_dir($folder . $stylesheet)) {
                 if (!is_readable($folder . $stylesheet) || !is_writable($folder . $stylesheet)) {
-                    $content1[strtolower($stylesheet)] = "<td><a href=\"" . $adminfile . "?op=home&folder=" . $folder . $stylesheet . "/\" class='a_folder'>" . $sstylesheet . "</a></td>\n"
+                    $content1[strtolower($stylesheet)] = "<td><a href=\"" . $config['adminfile'] . "?op=home&folder=" . $folder . $stylesheet . "/\" class='a_folder'>" . $sstylesheet . "</a></td>\n"
                         . "<td align=\"center\">" . $perm . "</td>\n"
                         . "<td align=\"right\" style='letter-spacing:nowrap;' nowrap></td>\n"
                         . "<td align=\"left\" colspan='5'>" . _LANG_HOME_MSG1 . "</td></tr>\n"
                         . "<tr height=\"2\"><td height=\"2\" colspan=\"8\">\n";
                 } else {
                     $n_size                            = filesize($folder . $stylesheet); //_get_dir_size($folder.$stylesheet);
-                    $content1[strtolower($stylesheet)] = "<td><a href=\"" . $adminfile . "?op=home&folder=" . $folder . $stylesheet . "/\" class='a_folder'>" . $sstylesheet . "</a></td>\n"
+                    $content1[strtolower($stylesheet)] = "<td><a href=\"" . $config['adminfile'] . "?op=home&folder=" . $folder . $stylesheet . "/\" class='a_folder'>" . $sstylesheet . "</a></td>\n"
                         . "<td align=\"center\">" . $perm . "</td>\n"
                         . "<td align=\"right\" style='letter-spacing:nowrap;' nowrap>" . _size_format($n_size) . "</td>\n"
-                        . "<td align=\"center\"><a href=\"" . $adminfile . "?op=home&folder=" . $folder . $stylesheet . "/\">" . _LANG_HOME_BT_OPEN . "</a></td>\n"
-                        . "<td align=\"center\"><a href=\"" . $adminfile . "?op=ren&file=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_RENAME . "</a></td>\n"
-                        . "<td align=\"center\"><a href=\"" . $adminfile . "?op=del&dename=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_DELETE . "</a></td>\n"
-                        . "<td align=\"center\"><a href=\"" . $adminfile . "?op=mov&file=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_MOVE . "</a></td>\n"
+                        . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=home&folder=" . $folder . $stylesheet . "/\">" . _LANG_HOME_BT_OPEN . "</a></td>\n"
+                        . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=ren&file=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_RENAME . "</a></td>\n"
+                        . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=del&dename=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_DELETE . "</a></td>\n"
+                        . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=mov&file=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_MOVE . "</a></td>\n"
                         . "<td align=\"center\"></td></tr><tr height=\"2\"><td height=\"2\" colspan=\"8\">\n";
                 }
                 $a++;
@@ -655,10 +665,10 @@ function home()
                     $content2[strtolower($stylesheet)] = "<td>" . $sstylesheet . "</td>\n"
                         . "<td align=\"center\">" . $perm . "</td>\n"
                         . "<td align=\"right\" style='letter-spacing:nowrap;' nowrap>" . _size_format($n_size) . "</td>\n"
-                        . "<td align=\"center\"><a href=\"" . $adminfile . "?op=edit&fename=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_EDIT . "</a></td>\n"
-                        . "<td align=\"center\"><a href=\"" . $adminfile . "?op=ren&file=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_RENAME . "</a></td>\n"
-                        . "<td align=\"center\"><a href=\"" . $adminfile . "?op=del&dename=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_DELETE . "</a></td>\n"
-                        . "<td align=\"center\"><a href=\"" . $adminfile . "?op=mov&file=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_MOVE . "</a></td>\n"
+                        . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=edit&fename=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_EDIT . "</a></td>\n"
+                        . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=ren&file=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_RENAME . "</a></td>\n"
+                        . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=del&dename=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_DELETE . "</a></td>\n"
+                        . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=mov&file=" . $stylesheet . "&folder=$folder\">" . _LANG_HOME_BT_MOVE . "</a></td>\n"
                         . "<td align=\"center\"><a href=\"" . $folder . $stylesheet . "\" target='_blank'>" . _LANG_HOME_BT_VIEW . "</a></td></tr>\n"
                         . "<tr height=\"2\"><td height=\"2\" colspan=\"8\">\n";
                 }
@@ -718,6 +728,7 @@ function home()
 /****************************************************************/
 function breadcrumb($path)
 {
+    global $config;
     $ex = explode('/', $path);
     if (count($ex) > 0) {
         $breadcrumb = '';
@@ -729,7 +740,7 @@ function breadcrumb($path)
                 $breadcrumb .= ' / ';
             }
             $subpath .= $subfolder;
-            $breadcrumb .= " <a href=\"" . $adminfile . "?op=home&folder=" . $subpath . "/\">" . $subfolder . "</a>";
+            $breadcrumb .= " <a href=\"" . $config['adminfile'] . "?op=home&folder=" . $subpath . "/\">" . $subfolder . "</a>";
         }
     } else {
         $breadcrumb = $path;
@@ -745,10 +756,10 @@ function breadcrumb($path)
 /****************************************************************/
 function up()
 {
-    global $folder, $content, $filefolder;
+    global $folder, $content, $filefolder,$config;
     maintop(_LANG_TOP_UPLOAD);
     $perm = substr(sprintf('%o', fileperms($filefolder)), -3);
-    echo "<FORM ENCTYPE=\"multipart/form-data\" ACTION=\"" . $adminfile . "?op=upload\" METHOD=\"POST\">\n"
+    echo "<FORM ENCTYPE=\"multipart/form-data\" ACTION=\"" . $config['adminfile'] . "?op=upload\" METHOD=\"POST\">\n"
         . "<font face=\"tahoma\" size=\"2\"><b>File:</b></font><br /><input type=\"File\" name=\"upfile\" size=\"20\" class=\"text\">\n"
 
         . "<br /><br />" . _LANG_UP_DESTINATION . ":<br /><select name='ndir' style='width:400px;'>\n"
@@ -772,7 +783,7 @@ function up()
 function upload($upfile, $ndir)
 {
 
-    global $folder;
+    global $folder,$config;
     if (!$upfile) {
         error(_LANG_UP_MSG1);
     } elseif ($upfile['name']) {
@@ -798,15 +809,15 @@ function upload($upfile, $ndir)
 /****************************************************************/
 function del($dename)
 {
-    global $folder;
+    global $folder,$config;
     if (!$dename == "") {
         maintop(_LANG_TOP_DELETE);
         echo ""
             . "<p class='error'>\n"
             . _LANG_DEL_MSG1 . "</p>\n"
             . "<p>" . str_replace('%1', "[ <span style='color:#c00;'>" . $folder . $dename . "</span> ]", _LANG_DEL_MSG2) . "</p>\n"
-            . "<a href='" . $adminfile . "?op=delete&dename=" . $dename . "&folder=$folder' class='button'>" . _LANG_YES . "</a>\n"
-            . "<a href='" . $adminfile . "?op=home&folder=$folder' class='button'>" . _LANG_NO . "</a>\n";
+            . "<a href='" . $config['adminfile'] . "?op=delete&dename=" . $dename . "&folder=$folder' class='button'>" . _LANG_YES . "</a>\n"
+            . "<a href='" . $config['adminfile'] . "?op=home&folder=$folder' class='button'>" . _LANG_NO . "</a>\n";
         mainbottom();
     } else {
         home();
@@ -820,7 +831,7 @@ function del($dename)
 /****************************************************************/
 function search()
 {
-    global $filefolder, $adminfile, $config;
+    global $filefolder, $config;
     maintop(_LANG_BT_SEARCH);
     // == load data
     if (!isset($_REQUEST['folder']) || trim($_REQUEST['folder']) == '')
@@ -836,7 +847,7 @@ function search()
     // == search options
     echo "<h3>" . _LANG_SCH_TIT1 . "</h3>\n";
     echo "<div class='list_dir'>\n";
-    echo "<form action='" . $adminfile . "?op=search&folder=" . $folder . "' method='post'>\n";
+    echo "<form action='" . $config['adminfile'] . "?op=search&folder=" . $folder . "' method='post'>\n";
     echo "<p>" . _LANG_SCH_DIR . " <span style='color:#c00;'>" . $folder . "</span></p>\n";
     echo "<div>" . _LANG_SCH_QRY . " <input type='text' name='query' id='query' value=\"" . htmlspecialchars($query) . "\"  style='width:300px;' /> &nbsp; "
         . _LANG_SCH_CASE . " <input type='checkbox' name='sensitive' " . (($sensitive == 'on') ? "checked='checked'" : "") . " /></div>";
@@ -886,7 +897,7 @@ function search()
 /****************************************************************/
 function delete($dename)
 {
-    global $folder;
+    global $folder,$config;
     if (!$dename == "") {
         maintop(_LANG_TOP_DELETE);
         echo "<p>";
@@ -917,7 +928,7 @@ function delete($dename)
 /****************************************************************/
 function edit($fename)
 {
-    global $folder;
+    global $folder,$config;
     if (!$fename == "") {
         maintop(_LANG_TOP_EDIT);
 
@@ -929,7 +940,7 @@ function edit($fename)
 
         echo $folder . $fename;
 
-        echo "<form action=\"" . $adminfile . "?op=save\" method='post'>\n"
+        echo "<form action=\"" . $config['adminfile'] . "?op=save\" method='post'>\n"
             . "<textarea rows='40' name='ncontent' style='width:100%;'>\n";
 
         $contents = "";
@@ -975,7 +986,7 @@ function edit($fename)
 /****************************************************************/
 function save($ncontent, $fename)
 {
-    global $folder;
+    global $folder,$config;
     if (!$fename == "") {
         maintop(_LANG_TOP_EDIT);
         $loc = $folder . $fename;
@@ -1016,13 +1027,13 @@ function save($ncontent, $fename)
 /****************************************************************/
 function cr()
 {
-    global $folder, $content, $filefolder;
+    global $folder, $content, $filefolder,$config;
     maintop(_LANG_TOP_CREATE);
     if (!$content == "") {
         echo "<br /><br />" . _LANG_CR_MSG1 . ".\n";
     }
     $perm = substr(sprintf('%o', fileperms($filefolder)), -3);
-    echo "<form action=\"" . $adminfile . "?op=create\" method=\"post\">\n";
+    echo "<form action=\"" . $config['adminfile'] . "?op=create\" method=\"post\">\n";
     echo "<input type=\"radio\" size=\"20\" name=\"isfolder\" value=\"0\" checked> " . _LANG_CR_FILE . "<br />\n"
         . "<input type=\"radio\" size=\"20\" name=\"isfolder\" value=\"1\"> " . _LANG_CR_DIRECTORY . "<br /><br />\n";
     echo _LANG_CR_FILENAME . ": <br /><input type=\"text\" size=\"20\" name=\"nfname\" class=\"text\"><br /><br />\n"
@@ -1047,7 +1058,7 @@ function cr()
 /****************************************************************/
 function create($nfname, $isfolder, $ndir)
 {
-    global $folder;
+    global $folder,$config;
     if (!$nfname == "") {
         maintop(_LANG_TOP_CREATE);
         if (substr($ndir, -1) != '/') $ndir .= '/';
@@ -1079,10 +1090,10 @@ function create($nfname, $isfolder, $ndir)
 /****************************************************************/
 function ren($file)
 {
-    global $folder;
+    global $folder,$config;
     if (!$file == "") {
         maintop(_LANG_TOP_RENAME);
-        echo "<form action=\"" . $adminfile . "?op=rename\" method=\"post\">\n"
+        echo "<form action=\"" . $config['adminfile'] . "?op=rename\" method=\"post\">\n"
             . "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n"
             . _LANG_REN_RENAMING . " [ <span style='color:#c00;'>" . $folder . $file . "</span> ]";
 
@@ -1107,7 +1118,7 @@ function ren($file)
 /****************************************************************/
 function renam($rename, $nrename, $folder)
 {
-    global $folder;
+    global $folder,$config;
     if (!$rename == "") {
         maintop(_LANG_TOP_RENAME);
         $loc1 = "$folder" . $rename;
@@ -1137,6 +1148,7 @@ function renam($rename, $nrename, $folder)
 /****************************************************************/
 function listdir($dir, $level_count = 0)
 {
+    global $config;
     if (!@($thisdir = opendir($dir))) {
         return;
     }
@@ -1156,7 +1168,7 @@ function listdir($dir, $level_count = 0)
 
 function a_listdir($dir, $onclick)
 {
-    global $filefolder;
+    global $filefolder,$config;
     if (!@($thisdir = opendir($dir))) {
         return;
     }
@@ -1202,10 +1214,10 @@ function a_listdir($dir, $onclick)
 /****************************************************************/
 function mov($file)
 {
-    global $folder, $content, $filefolder;
+    global $folder, $content, $filefolder,$config;
     if (!$file == "") {
         maintop(_LANG_TOP_MOVE);
-        echo "<form action=\"" . $adminfile . "?op=move\" method=\"post\">\n"
+        echo "<form action=\"" . $config['adminfile'] . "?op=move\" method=\"post\">\n"
             . "<div>\n"
             . str_replace('%1', "[ <span class='breadcrumb'>" . breadcrumb($folder) . " / " . $file . "</span> ]", _LANG_MOV_MSG1) . ": \n"
             . " <span id='span_target' style='color:#c00;'></span>\n"
@@ -1233,7 +1245,7 @@ function mov($file)
 /****************************************************************/
 function move($file, $ndir, $folder)
 {
-    global $folder;
+    global $folder,$config;
     if (!$file == "") {
         maintop(_LANG_TOP_MOVE);
         if (@rename($folder . $file, $ndir . $file)) {
@@ -1256,14 +1268,14 @@ function move($file, $ndir, $folder)
 /****************************************************************/
 function logout()
 {
-    global $login;
+    global $login,$config;
     setcookie("user", "", time() - 60 * 60 * 24 * 1);
     setcookie("pass", "", time() - 60 * 60 * 24 * 1);
 
     maintop(_LANG_TOP_LOGOUT, false);
     echo _LANG_LOGOUT_MSG1
         . "<hr /><br /><br />"
-        . "<a href=" . $adminfile . "?op=home>" . _LANG_LOGOUT_MSG2 . "</a>";
+        . "<a href=" . $config['adminfile'] . "?op=home>" . _LANG_LOGOUT_MSG2 . "</a>";
     mainbottom();
 }
 
@@ -1278,7 +1290,7 @@ function mainbottom()
     $a_skin_html = array();
     foreach ($a_skin as $t) {
         if ($skin != $t)
-            $a_skin_html[] = "<a href=\"" . $adminfile . "?op=home&skin=" . urlencode($t) . "\">" . $t . "</a>";
+            $a_skin_html[] = "<a href=\"" . $config['adminfile'] . "?op=home&skin=" . urlencode($t) . "\">" . $t . "</a>";
         else
             $a_skin_html[] = $t;
     }
@@ -1298,6 +1310,7 @@ function mainbottom()
 /****************************************************************/
 function printerror($error)
 {
+    global $config;
     maintop(_LANG_TOP_ERROR);
     echo "<font class=error>\n" . $error . "\n</font>";
     mainbottom();
