@@ -35,5 +35,4 @@ A unique PHP script of less than 100kb which help you to list, add, edit, move, 
 
  + if you can is better that you access the script using SSL certificate (https://)
  + upload this script only when you need it and after delete it
- + via FTP change the name of the script from .php to ._php (for example) when you finish your work session, and uncomment again when you need to continue the work
  + possibly the best option is this: put the script inside a directory protected with user/password through Apache directory protection
