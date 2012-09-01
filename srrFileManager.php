@@ -49,8 +49,8 @@ $config['version']          = '1.0';
 $config['a_users']          = array();
 $config['a_users']['admin'] = array('user'=> 'admin', 'pass'=> '1234', 'filefolder'=> './');
 
-$config['adminfile']        = $_SERVER['SCRIPT_NAME'];
-$config['SEARCH']           = array('scanned_files'=> 0, 'a_found'=> array());
+$config['adminfile'] = $_SERVER['SCRIPT_NAME'];
+$config['SEARCH']    = array('scanned_files'=> 0, 'a_found'=> array());
 
 /* ************************************************************** */
 /*								SKINS & STYLES
@@ -211,8 +211,8 @@ switch ($skin) {
 /*								LANGUAGES 
 /* ************************************************************** */
 
-$a_lang = array('cat'=> "Català", 'en'=> "English", 'es'=> "Castellano");
-
+$a_lang = array('cat'=> "Català", 'en'=> "English", 'es'=> "Castellano", 'de' => 'Deutsch');
+ asort($a_lang);
 $lang = (isset($_COOKIE['lang']) && isset($a_lang[$_COOKIE['lang']])) ? $_COOKIE['lang'] : 'en';
 if (isset($_GET['lang']) && isset($a_lang[trim($_GET['lang'])])) {
     $lang = trim($_GET['lang']);
@@ -484,6 +484,94 @@ switch ($lang) {
         define('_LANG_SCH_CASE', 'case-sensitive: ');
         define('_AVAILABLE_SKINS', 'Available themes: ');
         break;
+    case 'de':
+        // ====== ENGLISH
+        define('_LANG_SITETITLE', "Dateimanager");
+        define('_LANG_YES', 'Ja');
+        define('_LANG_NO', 'Nein');
+        define('_LANG_BT_HOME', 'Start');
+        define('_LANG_BT_UPLOAD', 'Datei hochladen');
+        define('_LANG_BT_CREATE', 'Erstellen');
+        define('_LANG_BT_SEARCH', 'Suchen');
+        define('_LANG_BT_LOGOUT', 'Abmelden');
+        define('_LANG_LOGIN_ERR', '**FEHLER: Falsche Anmeldeinformationen.**');
+        define('_LANG_LOGIN_USERNAME', 'Benutzername');
+        define('_LANG_LOGIN_PASSW', 'Kennwort');
+        define('_LANG_LOGIN_BT', 'Anmelden');
+        define('_LANG_HOME_BT_EDIT', 'Bearbeiten');
+        define('_LANG_HOME_BT_OPEN', 'Öffnen');
+        define('_LANG_HOME_BT_RENAME', 'Umbenennen');
+        define('_LANG_HOME_BT_DELETE', 'Löschen');
+        define('_LANG_HOME_BT_MOVE', 'Verschieben');
+        define('_LANG_HOME_BT_VIEW', 'Ansehen');
+        define('_LANG_HOME_LAB_BROWS', 'Pfad');
+        define('_LANG_HOME_LAB_NUM', 'Anzahl Dateien');
+        define('_LANG_HOME_LAB_FILE', 'Dateien & Verzeichnisse');
+        define('_LANG_HOME_LAB_PERM', 'Berechtigungen');
+        define('_LANG_HOME_LAB_SIZE', 'Größe');
+        define('_LANG_HOME_MSG1', 'Nicht lesbares/beschreibbares Verzeichnis.');
+        define('_LANG_HOME_MSG2', 'Nicht lesbare/beschreibbare Datei.');
+        define('_LANG_TOP_HOME', 'Start');
+        define('_LANG_TOP_LOGIN', 'Anmelden');
+        define('_LANG_TOP_UPLOAD', 'Datei hochladen');
+        define('_LANG_TOP_DELETE', 'Löschen');
+        define('_LANG_TOP_EDIT', 'Bearbeiten');
+        define('_LANG_TOP_CREATE', 'Erstellen');
+        define('_LANG_TOP_RENAME', 'Umbenennen');
+        define('_LANG_TOP_MOVE', 'Verschieben');
+        define('_LANG_TOP_VIEW', 'Datei ansehen');
+        define('_LANG_TOP_LOGOUT', 'Abmelden');
+        define('_LANG_TOP_ERROR', 'Fehler');
+        define('_LANG_UP_DESTINATION', 'Ziel');
+        define('_LANG_UP_BT', 'Hochladen');
+        define('_LANG_UP_MSG1', 'Datei zu groß oder Bytes=0');
+        define('_LANG_UP_MSG2', "Die Datei %1 wurde erfolgreich hochgeladen");
+        define('_LANG_UP_MSG3', "Die Datei %1 wurde nicht erfolgreich hochgeladen.");
+        define('_LANG_UP_MSG4', "Bitte Dateinamen angeben.");
+        define('_LANG_DEL_MSG1', "**ACHTUNG: Dies wird die Datei löschen. Diese Aktion kann nicht rückgängig gemacht werden.**");
+        define('_LANG_DEL_MSG2', "Sind Sie sicher, dass Sie die Datei %1 löschen möchten?");
+        define('_LANG_DEL_MSG3', "%1 wurde gelöscht.");
+        define('_LANG_DEL_MSG4', "Es gab ein Problem beim Löschen des Verzeichnisses %1.");
+        define('_LANG_DEL_MSG5', "Es gab ein Problem beim Löschen der Datei %1.");
+        define('_LANG_EDIT_BT', "Speichern");
+        define('_LANG_EDIT_MSG1', "Die Datei %1 wurde erfolgreich bearbeitet.");
+        define('_LANG_EDIT_MSG2', "Es gab ein Problem beim Bearbeiten der Datei.");
+        define('_LANG_CR_MSG1', "Bitte geben Sie einen Dateinamen an.");
+        define('_LANG_CR_FILENAME', "Dateiname");
+        define('_LANG_CR_DESTINATION', "Ziel");
+        define('_LANG_CR_FILE', "Datei");
+        define('_LANG_CR_DIRECTORY', "Verzeichnis");
+        define('_LANG_CR_BT', "Erstellen");
+        define('_LANG_CRT_MSG1', "Das Verzeichnis %1 wurde erfolgreich erstellt.");
+        define('_LANG_CRT_MSG2', "Das Verzeichnis %1 konnte nicht erstellt werden. Stellen Sie sicher, dass das Verzeichnis beschreibbar ist.");
+        define('_LANG_CRT_MSG3', "Die Datei %1 wurde erfolgreich erstellt.");
+        define('_LANG_CRT_MSG4', "Die Datei %1 konnte nicht erstellt werden. Stellen Sie sicher, dass das Verzeichnis beschreibbar ist.");
+        define('_LANG_REN_RENAMING', "Umbenennen");
+        define('_LANG_REN_NEW', "Neuer Name");
+        define('_LANG_REN_BT', "Umbenennen");
+        define('_LANG_REN_MSG1', "Die Datei %1 wurde umbenannt in %2");
+        define('_LANG_REN_MSG2', "Es gab ein Problem beim Umbenennen der Datei. Prüfen Sie die Berechtigungen.");
+        define('_LANG_REN_MSG3', "Es gabein Problem beim Umbenennen des Verzeichnisses. Prüfen Sie die Berechtigungen.");
+        define('_LANG_MOV_MSG1', "Verschiebe %1 nach");
+        define('_LANG_MOV_BT', "Verschieben");
+        define('_LANG_MOV_MSG2', "%1 wurde erfolgrach nach %2 verschoben");
+        define('_LANG_MOV_MSG3', "Es gab einen Fehler beim Verschieben von  %1.");
+        define('_LANG_FR_MSG1', "**FEHLER: Sie wolten %1 sehen, aber dies liegt außerhalb des Basisverzeichnis: %2 **");
+        define('_LANG_LOGOUT_MSG1', "Sie sind nun abgemeldet.");
+        define('_LANG_LOGOUT_MSG2', "Klicken Sie hier, um sich wieder anzumelden.");
+        define('_LANG_ABOVE', "Hoch");
+        define('_LANG_BELOW', "Runter");
+        define('_LANG_SCH_TIT1', 'Suchoptionen');
+        define('_LANG_SCH_DIR', 'Verzeichnis in dem gesucht wird:');
+        define('_LANG_SCH_QRY', 'Was soll gesucht werden:');
+        define('_LANG_SCH_WHERE', 'Wo soll gesucht werden:');
+        define('_LANG_SCH_W1', "in Datei- und Verzeichnisnamen");
+        define('_LANG_SCH_W2', "innerhalb des Inhalts von Dateien mit der Endung: ");
+        define('_LANG_SCH_BT', 'jetzt suchen');
+        define('_LANG_SCH_TIT2', 'Suchergebnisse');
+        define('_LANG_SCH_CASE', 'Groß- und Kleinschreibung unterscheiden: ');
+        define('_AVAILABLE_SKINS', 'Verfügbare Themes: ');
+        break;
 }
 
 /****************************************************************/
@@ -491,32 +579,33 @@ switch ($lang) {
 /*                                                              */
 /* Looks for cookies. Yum.                                      */
 /****************************************************************/
-
-    if (isset($_REQUEST['user'])){
-        // try login
-        if (isset($config['a_users'][$_REQUEST['user']]) 
-                && $config['a_users'][$_REQUEST['user']]['pass'] == $_REQUEST['pass']){
-            setcookie('user', $_REQUEST['user'], time() + 60 * 60 * 24 * 1);
-            setcookie('pass', md5($config['a_users'][$_REQUEST['user']]['pass']), time() + 60 * 60 * 24 * 1);
-            $config['user'] = $_REQUEST['user'];
-        }else{
-            login(true);
-        }
-           
-    }else if (isset($_COOKIE['user'])){
-        // once inside
-        if (md5($config['a_users'][$_COOKIE['user']]['pass']) != $_COOKIE['pass'])
-            login(true);
-    }else{
-        // first visit
-        login();
+if (isset($_POST['user'])) {
+    // try login
+    if (isset($config['a_users'][$_REQUEST['user']])
+        && $config['a_users'][$_REQUEST['user']]['pass'] == $_REQUEST['pass']
+    ) {
+        setcookie('user', $_REQUEST['user'], time() + 60 * 60 * 24 * 1);
+        setcookie('pass', md5($config['a_users'][$_REQUEST['user']]['pass']), time() + 60 * 60 * 24 * 1);
+        $config['user'] = $_REQUEST['user'];
+    } else {
+        login(true);
     }
+
+} else if (isset($_COOKIE['user'])) {
+    // once inside
+    if (md5($config['a_users'][$_COOKIE['user']]['pass']) != $_COOKIE['pass']) {
+        login(true);
+    }
+} else {
+    // first visit
+    login();
+}
 
 /* ************************************************************** */
 
-$op     = (isset($_POST['op'])) ? $_POST['op'] : ((isset($_GET['op'])) ? $_GET['op'] : ((isset($_REQUEST['op']))?$_REQUEST['op']:""));
-$folder = (isset($_POST['folder'])) ? $_POST['folder'] : ((isset($_GET['folder'])) ? $_GET['folder'] : ((isset($_REQUEST['folder']))?$_REQUEST['folder']:""));
-$user   = (isset($_COOKIE['user'])) ? $_COOKIE['user'] : ((isset($_POST['user']))?$_POST['user']:"");
+$op     = (isset($_POST['op'])) ? $_POST['op'] : ((isset($_GET['op'])) ? $_GET['op'] : ((isset($_REQUEST['op'])) ? $_REQUEST['op'] : ""));
+$folder = (isset($_POST['folder'])) ? $_POST['folder'] : ((isset($_GET['folder'])) ? $_GET['folder'] : ((isset($_REQUEST['folder'])) ? $_REQUEST['folder'] : ""));
+$user   = (isset($_COOKIE['user'])) ? $_COOKIE['user'] : ((isset($_POST['user'])) ? $_POST['user'] : "");
 //while (preg_match('/\.\.\//',$folder)) $folder = preg_replace('/\.\.\//','/',$folder);
 while (preg_match('/\/\//', $folder)) $folder = preg_replace('/\/\//', '/', $folder);
 
@@ -576,7 +665,7 @@ function maintop($title, $showtop = true)
 /****************************************************************/
 function login($er = false)
 {
-    global $op,$config;
+    global $op, $config;
     setcookie("user", "", time() - 60 * 60 * 24 * 1);
     setcookie("pass", "", time() - 60 * 60 * 24 * 1);
     maintop(_LANG_TOP_LOGIN, false);
@@ -588,9 +677,9 @@ function login($er = false)
     echo "<hr /><form action=\"" . $config['adminfile'] . "?op=" . $op . "\" method=\"post\">\n"
         . "<table id='tb_login'>\n"
         . "<tr><td class='a_r' style='width:40%;'>" . _LANG_LOGIN_USERNAME . ":</td>"
-        . "	<td class='a_l'><input type='text' name='user' value=\"" . ((isset($_REQUEST['user']))?htmlspecialchars($_REQUEST['user']):"") . "\"></td></tr>\n"
+        . "	<td class='a_l'><input type='text' name='user' value=\"" . ((isset($_REQUEST['user'])) ? htmlspecialchars($_REQUEST['user']) : "") . "\"></td></tr>\n"
         . "<tr><td class='a_r'>" . _LANG_LOGIN_PASSW . ": </td>\n"
-        . "	<td class='a_l'><input type='password' name='pass' value=\"" . ((isset($_REQUEST['pass']))?htmlspecialchars($_REQUEST['pass']):"") . "\"></td></tr>\n"
+        . "	<td class='a_l'><input type='password' name='pass' value=\"" . ((isset($_REQUEST['pass'])) ? htmlspecialchars($_REQUEST['pass']) : "") . "\"></td></tr>\n"
         . "<tr><td>&nbsp;</td><td class='a_l'><br /><input type='submit' name='submitButtonName' value=\"" . htmlspecialchars(_LANG_LOGIN_BT) . "\"></td></tr>\n"
         . "</table>\n"
         . "</form>\n";
@@ -606,7 +695,7 @@ function login($er = false)
 /****************************************************************/
 function home()
 {
-    global $folder, $filefolder, $HTTP_HOST,$config;
+    global $folder, $filefolder, $HTTP_HOST, $config;
     maintop(_LANG_TOP_HOME);
 
     $content1 = "";
@@ -756,7 +845,7 @@ function breadcrumb($path)
 /****************************************************************/
 function up()
 {
-    global $folder, $content, $filefolder,$config;
+    global $folder, $content, $filefolder, $config;
     maintop(_LANG_TOP_UPLOAD);
     $perm = substr(sprintf('%o', fileperms($filefolder)), -3);
     echo "<FORM ENCTYPE=\"multipart/form-data\" ACTION=\"" . $config['adminfile'] . "?op=upload\" METHOD=\"POST\">\n"
@@ -783,7 +872,7 @@ function up()
 function upload($upfile, $ndir)
 {
 
-    global $folder,$config;
+    global $folder, $config;
     if (!$upfile) {
         error(_LANG_UP_MSG1);
     } elseif ($upfile['name']) {
@@ -809,7 +898,7 @@ function upload($upfile, $ndir)
 /****************************************************************/
 function del($dename)
 {
-    global $folder,$config;
+    global $folder, $config;
     if (!$dename == "") {
         maintop(_LANG_TOP_DELETE);
         echo ""
@@ -897,7 +986,7 @@ function search()
 /****************************************************************/
 function delete($dename)
 {
-    global $folder,$config;
+    global $folder, $config;
     if (!$dename == "") {
         maintop(_LANG_TOP_DELETE);
         echo "<p>";
@@ -928,7 +1017,7 @@ function delete($dename)
 /****************************************************************/
 function edit($fename)
 {
-    global $folder,$config;
+    global $folder, $config;
     if (!$fename == "") {
         maintop(_LANG_TOP_EDIT);
 
@@ -944,9 +1033,7 @@ function edit($fename)
             . "<textarea rows='40' name='ncontent' style='width:100%;'>\n";
 
         $contents = "";
-
-        while ($x < 1) {
-            $data = @fread($handle, filesize($folder . $fename));
+        while ($data = @fread($handle, filesize($folder . $fename))) {
             if (strlen($data) == 0) {
                 break;
             }
@@ -986,7 +1073,7 @@ function edit($fename)
 /****************************************************************/
 function save($ncontent, $fename)
 {
-    global $folder,$config;
+    global $folder;
     if (!$fename == "") {
         maintop(_LANG_TOP_EDIT);
         $loc = $folder . $fename;
@@ -1007,7 +1094,7 @@ function save($ncontent, $fename)
         $ydata = stripslashes($ncontent);
 
         if (@fwrite($fp, $ydata)) {
-            echo str_replace('%1', "[ <span style='color:#c00;'><a href=\"" . $foler . $fename . "\" target='_blank'>" . $folder . $fename . "</a></span> ]", _LANG_EDIT_MSG1);
+            echo str_replace('%1', "[ <span style='color:#c00;'><a href=\"" . $folder . $fename . "\" target='_blank'>" . $folder . $fename . "</a></span> ]", _LANG_EDIT_MSG1);
             $fp = null;
         } else {
             echo _LANG_EDIT_MSG2 . "\n";
@@ -1027,7 +1114,7 @@ function save($ncontent, $fename)
 /****************************************************************/
 function cr()
 {
-    global $folder, $content, $filefolder,$config;
+    global $folder, $content, $filefolder, $config;
     maintop(_LANG_TOP_CREATE);
     if (!$content == "") {
         echo "<br /><br />" . _LANG_CR_MSG1 . ".\n";
@@ -1058,7 +1145,6 @@ function cr()
 /****************************************************************/
 function create($nfname, $isfolder, $ndir)
 {
-    global $folder,$config;
     if (!$nfname == "") {
         maintop(_LANG_TOP_CREATE);
         if (substr($ndir, -1) != '/') $ndir .= '/';
@@ -1090,7 +1176,7 @@ function create($nfname, $isfolder, $ndir)
 /****************************************************************/
 function ren($file)
 {
-    global $folder,$config;
+    global $folder, $config;
     if (!$file == "") {
         maintop(_LANG_TOP_RENAME);
         echo "<form action=\"" . $config['adminfile'] . "?op=rename\" method=\"post\">\n"
@@ -1118,7 +1204,7 @@ function ren($file)
 /****************************************************************/
 function renam($rename, $nrename, $folder)
 {
-    global $folder,$config;
+    global $folder, $config;
     if (!$rename == "") {
         maintop(_LANG_TOP_RENAME);
         $loc1 = "$folder" . $rename;
@@ -1168,7 +1254,7 @@ function listdir($dir, $level_count = 0)
 
 function a_listdir($dir, $onclick)
 {
-    global $filefolder,$config;
+    global $filefolder, $config;
     if (!@($thisdir = opendir($dir))) {
         return;
     }
@@ -1214,7 +1300,7 @@ function a_listdir($dir, $onclick)
 /****************************************************************/
 function mov($file)
 {
-    global $folder, $content, $filefolder,$config;
+    global $folder, $content, $filefolder, $config;
     if (!$file == "") {
         maintop(_LANG_TOP_MOVE);
         echo "<form action=\"" . $config['adminfile'] . "?op=move\" method=\"post\">\n"
@@ -1245,7 +1331,7 @@ function mov($file)
 /****************************************************************/
 function move($file, $ndir, $folder)
 {
-    global $folder,$config;
+    global $folder, $config;
     if (!$file == "") {
         maintop(_LANG_TOP_MOVE);
         if (@rename($folder . $file, $ndir . $file)) {
@@ -1268,7 +1354,7 @@ function move($file, $ndir, $folder)
 /****************************************************************/
 function logout()
 {
-    global $login,$config;
+    global $login, $config;
     setcookie("user", "", time() - 60 * 60 * 24 * 1);
     setcookie("pass", "", time() - 60 * 60 * 24 * 1);
 
