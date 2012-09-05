@@ -1,9 +1,5 @@
 <?php
-
-global $config,$l;
-
 $config['a_lang']['en']='english';
-
 $l['SITETITLE'] = "File manager";
 $l['YES'] = 'Yes';
 $l['NO'] = 'No';
@@ -88,6 +84,3 @@ $l['SCH_BT'] = 'search now';
 $l['SCH_TIT2'] = 'Search results';
 $l['SCH_CASE'] = 'case-sensitive: ';
 $l['AVAILABLE_SKINS'] = 'Available themes: ';
-
-
-?>

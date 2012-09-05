@@ -1,7 +1,4 @@
 <?php
-
-global $config,$l;
-
 $config['a_lang']['de']='deutsch';
 
 $l['SITETITLE'] = "Dateimanager";
@@ -88,6 +85,3 @@ $l['SCH_BT'] = 'jetzt suchen';
 $l['SCH_TIT2'] = 'Suchergebnisse';
 $l['SCH_CASE'] = 'Groß- und Kleinschreibung unterscheiden: ';
 $l['AVAILABLE_SKINS'] = 'Verfügbare Themes: ';
-
-
-?>
