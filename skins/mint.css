@@ -1,0 +1,69 @@
+/* 
+    Document   : mint
+    Created on : 04/09/2012, 13:13:28
+    Author     : caos30
+    Description:
+        be a light theme, in honour of Linux Mint ;)
+*/
+
+body {color: #444; font-size:11px; font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; scrollbar-base-color: #a6a6a6; MARGIN: 0px 0px 10px; BACKGROUND-COLOR: #ffffff}
+p, td, a, span {font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;}
+a {color:#8b8;text-decoration:none;}
+a:hover {color:#333;}
+hr{color:#ccd;height:1px;border:0px;border-bottom:2px #ccd solid;margin:17px 0px;}
+
+.copyright {font-size:10px; color: #000000; text-align: left;}
+.error {font-size:10px; color: #AA2222;}
+
+#wrapper{position:relative;width:750px;margin:11px auto;border:2px #eee solid;padding:15px;-webkit-border-radius: 3px;-moz-border-radius: 3px;}
+h1{margin:0px 0px 7px 0px;font-size:18px;color:#555;}
+#languages{text-align:right;}
+#languages a, .button{display:inline-block;padding:2px 4px;border:1px #ddd solid;background-color:#eee;margin:3px;}
+#tb_login{width:100%;}
+#top_menu{border-top:2px #cdc solid;border-bottom:2px #cdc solid;margin:15px 0px;}
+#top_menu a{display:inline-block;padding:2px 6px;margin:3px;background-color:#cdc;color:#222;border:1px #aca solid;font-weight:bold;
+                letter-spacing:1px;
+                -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+-moz-border-radius-topleft: 4px;
+border-top-left-radius: 4px;
+-moz-border-radius-topright: 50px;		
+border-top-right-radius: 50px;
+
+#top_menu a:hover{background-color:#ded;}
+
+td { font-size : 80%;font-family : Tahoma, Verdana, Arial, Helvetica, sans-serif;color: #000000;font-weight: 700;}
+.tr_impar{background-color:#ded;}
+.tr_par{background-color:#c5d5c5;}
+
+.f_l {float:left;}
+.a_l{text-align:left;}
+.a_r{text-align:right;}
+.a_c{text-align:center;}
+
+.breadcrumb{margin:11px 0px;}
+.breadcrumb span{color:#333;}
+.breadcrumb em{color:#c00;font-style:normal;}
+.breadcrumb a{display:inline-block;padding:2px 4px;border:1px #ddd solid;background-color:#eee;}
+
+#tb_list{width:100%;}
+#tb_list th{background-color:#eee;color:#555;font-weight:bold;font-size:12px;padding:5px;}
+#tb_list td{padding:1px 3px;font-weight:normal;}
+#tb_list td a{display:inline-block;padding:2px 6px;margin:3px;background-color:#efe;color:#222;border:1px #ded solid;font-size:12px;
+                    font-weight:normal;
+                -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+#tb_list td a:hover{background-color:#ded;}
+#tb_list td a.a_folder{background-color:#fed;width:98%;border:1px #edc solid;
+                -moz-border-radius-topleft: 10px;border-top-left-radius: 10px;-moz-border-radius-topright: 10px;border-top-right-radius: 10px;}
+#tb_list td a.a_folder:hover{background-color:#ffe;}
+
+.size_b{color:#666;}
+.size_kb{color:#944;}
+.size_mb{color:#c22;}
+.size_gb{color:#f00;}
+
+div.list_dir{background:#eee;padding:11px;margin:11px;-webkit-border-radius: 5px;-moz-border-radius: 5px;}
+div.list_dir em{background:#ddd;font-style:normal;}
+div.list_dir a{display:block;padding:2px;margin:2px;background:#e5e5e5;}
+div.list_dir a:hover{background:#f5f5f5;}
+
+#main_bottom{margin:11px 0px;margin-top:51px;}

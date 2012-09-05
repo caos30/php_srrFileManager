@@ -1,0 +1,73 @@
+/* 
+    Document   : night
+    Created on : 04/09/2012, 13:13:28
+    Author     : caos30
+    Description:
+        be a dark theme, for economize energy 
+*/
+
+body {color: #ccc; font-size:11px; font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; scrollbar-base-color: #a6a6a6; MARGIN: 0px 0px 10px; background-color: #001;}
+.copyright {font-size:10px; text-align: left;}
+
+p, td, a, span {font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;}
+a {color:#aad;text-decoration:none;}
+a:hover {color:#ccf;}
+h1{margin:0px 0px 7px 0px;font-size:18px;color:#aaa;}
+hr{color:#445;height:1px;border:0px;border-bottom:2px #445 solid;margin:17px 0px;}
+textarea,input,select{background-color:#445;color:#cce;border-color:#666;border-width:1px; padding:3px;}
+
+.error {color: #e88;}
+
+#wrapper{position:relative;width:750px;margin:11px auto;border:2px #334 solid;padding:15px;-webkit-border-radius: 3px;-moz-border-radius: 3px;}
+#languages{text-align:right;}
+#languages a, .button{display:inline-block;padding:2px 4px;border:1px #555 solid;background-color:#334;margin:3px;}
+#tb_login{width:100%;}
+#top_menu{border-top:2px #334 solid;border-bottom:2px #334 solid;margin:15px 0px;}
+#top_menu a{display:inline-block;padding:2px 6px;margin:3px;border:1px #555 solid;font-weight:bold;
+                letter-spacing:1px;background-color:#334;
+                -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+#top_menu a:hover{background-color:#445;}
+-moz-border-radius-topleft: 4px;
+border-top-left-radius: 4px;
+-moz-border-radius-topright: 50px;		
+border-top-right-radius: 50px;
+
+#top_menu a:hover{background-color:#565;}
+
+td { color: #aaa;font-size : 80%;font-family : Tahoma, Verdana, Arial, Helvetica, sans-serif;font-weight: 700;}
+.tr_impar{background-color:#18181c;}
+.tr_par{background-color:#202025;}
+
+.f_l {float:left;}
+.a_l{text-align:left;}
+.a_r{text-align:right;}
+.a_c{text-align:center;}
+
+.breadcrumb{margin:11px 0px;}
+.breadcrumb span{color:#ccc;}
+.breadcrumb em{color:#f88;font-style:normal;}
+.breadcrumb a{background-color:#334;display:inline-block;padding:2px 4px;border:1px #555 solid;}
+.breadcrumb a:hover{background-color:#445;}
+
+#tb_list{width:100%;}
+#tb_list th{background-color:#111;color:#bbb;font-weight:bold;font-size:12px;padding:5px;}
+#tb_list td{padding:1px 3px;font-weight:normal;}
+#tb_list td a{display:inline-block;padding:2px 6px;margin:3px;border:1px #444 solid;font-size:12px;
+        font-weight:normal;background-color:#334;
+        -webkit-border-radius: 3px;-moz-border-radius: 3px;}
+#tb_list td a:hover{background-color:#445;}
+#tb_list td a.a_folder{background-color:#334;width:98%;border:1px #555 solid;
+                -moz-border-radius-topleft: 10px;border-top-left-radius: 10px;-moz-border-radius-topright: 10px;border-top-right-radius: 10px;}
+#tb_list td a.a_folder:hover{background-color:#445;}
+
+.size_b{color:#666;}
+.size_kb{color:#944;}
+.size_mb{color:#c22;}
+.size_gb{color:#f00;}
+
+div.list_dir{background:#223;padding:11px;margin:11px;-webkit-border-radius: 5px;-moz-border-radius: 5px;}
+div.list_dir em{background:#334;font-style:normal;}
+div.list_dir a{display:block;padding:2px;margin:2px;background:#050505;}
+div.list_dir a:hover{background:#151515;}
+
+#main_bottom{margin:11px 0px;margin-top:51px;}
