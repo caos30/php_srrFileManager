@@ -56,24 +56,24 @@ $config['SEARCH']    = array('scanned_files'=> 0, 'a_found'=> array());
 /*								SKINS & STYLES
 /* ************************************************************** */
 
-$skins_dir=dirname(__FILE__).'/skins';
+$skins_dir = dirname(__FILE__) . '/skins';
 
 // == list of templates
-if (isset($_COOKIE['a_skins'])){
-   $config['a_skins']=unserialize($_COOKIE['a_skins']);
-}else{
-   // reset list
-   $config['a_skins']=array();
-   // scan folder with skins (.css files)
-   $dh = opendir($skins_dir);
-   while (($file = readdir($dh)) != false) {
+if (isset($_COOKIE['a_skins'])) {
+    $config['a_skins'] = unserialize($_COOKIE['a_skins']);
+} else {
+    // reset list
+    $config['a_skins'] = array();
+    // scan folder with skins (.css files)
+    $dh = opendir($skins_dir);
+    while (($file = readdir($dh)) != false) {
         if ($file != '.' && $file != '..') {
-           $skin=substr($file,0,-4);
-           $config['a_skins'][$skin]=$skin;
+            $skin                     = substr($file, 0, -4);
+            $config['a_skins'][$skin] = $skin;
         }
-   }
-   // store at cookie
-   setcookie('a_skins', serialize($config['a_skins']), time()+3600*24*365);
+    }
+    // store at cookie
+    setcookie('a_skins', serialize($config['a_skins']), time() + 3600 * 24 * 365);
 }
 
 // == decide the language for this thread
@@ -86,27 +86,26 @@ if (isset($_GET['skin']) && isset($config['a_skins'][trim($_GET['skin'])])) {
 /* ************************************************************** */
 /*								LANGUAGES 
 /* ************************************************************** */
-
-$l=array(); // for store translations
-$lang_dir=dirname(__FILE__).'/languages';
+$l        = array(); // for store translations
+$lang_dir = dirname(__FILE__) . '/languages';
 
 // == list of languages
-if (isset($_COOKIE['a_lang'])){
-   $config['a_lang']=unserialize($_COOKIE['a_lang']);
-}else{
-   // reset list
-   $config['a_lang']=array();
-   // scan folder with translations
-   $dh = opendir($lang_dir);
-   while (($file = readdir($dh)) != false) {
+if (isset($_COOKIE['a_lang'])) {
+    $config['a_lang'] = unserialize($_COOKIE['a_lang']);
+} else {
+    // reset list
+    $config['a_lang'] = array();
+    // scan folder with translations
+    $dh = opendir($lang_dir);
+    while (($file = readdir($dh)) != false) {
         if ($file != '.' && $file != '..' && $file != 'en.php') {
-           include_once($lang_dir.'/'.$file);
+            include_once($lang_dir . '/' . $file);
         }
-   }
-   // load the english translation (default language)
-   include_once($lang_dir.'/en.php');
-   // store at cookie
-   setcookie('a_lang', serialize($config['a_lang']), time()+3600*24*365);
+    }
+    // load the english translation (default language)
+    include_once($lang_dir . '/en.php');
+    // store at cookie
+    setcookie('a_lang', serialize($config['a_lang']), time() + 3600 * 24 * 365);
 }
 asort($config['a_lang']);
 
@@ -118,8 +117,8 @@ if (isset($_GET['lang']) && isset($config['a_lang'][trim($_GET['lang'])])) {
 }
 
 // == load language translations
-if (!isset($l['SITETITLE']) || $lang!='en'){
-   include_once($lang_dir.'/'.$lang.'.php');
+if (!isset($l['SITETITLE']) || $lang != 'en') {
+    include_once($lang_dir . '/' . $lang . '.php');
 }
 
 /****************************************************************/
@@ -157,12 +156,12 @@ $user   = (isset($_COOKIE['user'])) ? $_COOKIE['user'] : ((isset($_POST['user'])
 //while (preg_match('/\.\.\//',$folder)) $folder = preg_replace('/\.\.\//','/',$folder);
 while (preg_match('/\/\//', $folder)) $folder = preg_replace('/\/\//', '/', $folder);
 
-$filefolder = $config['a_users'][$user]['filefolder'];
+$fileFolder = $config['a_users'][$user]['filefolder'];
 if ($folder == '') {
-    $folder = $filefolder;
-} elseif ($filefolder != '') {
-    if (!preg_match(_2preg($filefolder), $folder)) {
-        $folder = $filefolder;
+    $folder = $fileFolder;
+} elseif ($fileFolder != '') {
+    if (!preg_match(_2preg($fileFolder), $folder)) {
+        $folder = $fileFolder;
     }
 }
 
@@ -175,12 +174,11 @@ if ($folder == '') {
 /****************************************************************/
 function maintop($title, $showtop = true)
 {
-    global $lastsess, $login, $viewing, $user, $pass, $password, $debug, $issuper, $a_lang;
-    global $config,$l;
+    global $config, $l;
     echo "<html>\n<head>\n"
         . "\n<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />"
         . "<title>" . $l['SITETITLE'] . " :: $title</title>\n"
-        . "<link rel='stylesheet' type='text/css' href='skins/".$config['skin'].".css' />\n"
+        . "<link rel='stylesheet' type='text/css' href='skins/" . $config['skin'] . ".css' />\n"
         . "</head>\n"
         . "<body>\n";
 
@@ -201,7 +199,6 @@ function maintop($title, $showtop = true)
             . "<a href='" . $config['adminfile'] . "?op=logout'>" . $l['BT_LOGOUT'] . "</a>\n"
             . "</div>";
     }
-
 }
 
 
@@ -213,7 +210,7 @@ function maintop($title, $showtop = true)
 /****************************************************************/
 function login($er = false)
 {
-    global $op, $config,$l;
+    global $op, $config, $l;
     setcookie("user", "", time() - 60 * 60 * 24 * 1);
     setcookie("pass", "", time() - 60 * 60 * 24 * 1);
     maintop($l['TOP_LOGIN'], false);
@@ -243,24 +240,16 @@ function login($er = false)
 /****************************************************************/
 function home()
 {
-    global $folder, $filefolder, $HTTP_HOST, $config, $l;
+    global $folder, $config, $l;
     maintop($l['TOP_HOME']);
 
     $content1 = "";
     $content2 = "";
 
     $count = "0";
-    $hf = opendir($folder);
+    $hf    = opendir($folder);
     $a     = 1;
     $b     = 1;
-    if ($folder) {
-        if (preg_match(_2preg('/home/'), $folder)) {
-            $folderx = preg_replace(_2preg($filefolder), "", $folder);
-            $folderx = "http://" . $HTTP_HOST . "/" . $folderx;
-        } else {
-            $folderx = $folder;
-        }
-    }
 
     while ($file = readdir($hf)) {
         if (strlen($file) > 40) {
@@ -278,7 +267,7 @@ function home()
                         . "<td align=\"left\" colspan='5'>" . $l['HOME_MSG1'] . "</td></tr>\n"
                         . "<tr height=\"2\"><td height=\"2\" colspan=\"8\">\n";
                 } else {
-                    $n_size                            = filesize($folder . $file); //_get_dir_size($folder.$file);
+                    $n_size                      = filesize($folder . $file); //_get_dir_size($folder.$file);
                     $content1[strtolower($file)] = "<td><a href=\"" . $config['adminfile'] . "?op=home&folder=" . $folder . $file . "/\" class='a_folder'>" . $sfile . "</a></td>\n"
                         . "<td align=\"center\">" . $perm . "</td>\n"
                         . "<td align=\"right\" style='letter-spacing:nowrap;' nowrap>" . _size_format($n_size) . "</td>\n"
@@ -298,7 +287,7 @@ function home()
                         . "<td align=\"left\" colspan='5'>" . $l['HOME_MSG2'] . "</td></tr>\n"
                         . "<tr height=\"2\"><td height=\"2\" colspan=\"8\">\n";
                 } else {
-                    $n_size                            = filesize($folder . $file);
+                    $n_size                      = filesize($folder . $file);
                     $content2[strtolower($file)] = "<td>" . $sfile . "</td>\n"
                         . "<td align=\"center\">" . $perm . "</td>\n"
                         . "<td align=\"right\" style='letter-spacing:nowrap;' nowrap>" . _size_format($n_size) . "</td>\n"
@@ -365,7 +354,7 @@ function home()
 /****************************************************************/
 function breadcrumb($path)
 {
-    global $config, $l;
+    global $config;
     $ex = explode('/', $path);
     if (count($ex) > 0) {
         $breadcrumb = '';
@@ -393,15 +382,15 @@ function breadcrumb($path)
 /****************************************************************/
 function up()
 {
-    global $folder, $content, $filefolder, $config, $l;
+    global $fileFolder, $config, $l;
     maintop($l['TOP_UPLOAD']);
-    $perm = substr(sprintf('%o', fileperms($filefolder)), -3);
+    $perm = substr(sprintf('%o', fileperms($fileFolder)), -3);
     echo "<FORM ENCTYPE=\"multipart/form-data\" ACTION=\"" . $config['adminfile'] . "?op=upload\" METHOD=\"POST\">\n"
-        . "<font face=\"tahoma\" size=\"2\"><b>".$l['CR_FILE'].":</b></font><br /><input type=\"File\" name=\"upfile\" size=\"20\" class=\"text\">\n"
+        . "<font face=\"tahoma\" size=\"2\"><b>" . $l['CR_FILE'] . ":</b></font><br /><input type=\"File\" name=\"upfile\" size=\"20\" class=\"text\">\n"
 
         . "<br /><br />" . $l['UP_DESTINATION'] . ":<br /><select name='ndir' style='width:400px;'>\n"
-        . "<option value=\"" . $filefolder . "\">[$perm] " . $filefolder . "</option>";
-    listdir($filefolder);
+        . "<option value=\"" . $fileFolder . "\">[$perm] " . $fileFolder . "</option>";
+    listdir($fileFolder);
     echo "</select><br /><br />"
         . "<input type=\"submit\" value=\"" . $l['UP_BT'] . "\" >\n"
         . "</form>\n";
@@ -420,9 +409,9 @@ function up()
 function upload($upfile, $ndir)
 {
 
-    global $folder, $config, $l;
+    global $l;
     if (!$upfile) {
-        error($l['UP_MSG1']);
+        printerror($l['UP_MSG1']);
     } elseif ($upfile['name']) {
         if (@copy($upfile['tmp_name'], $ndir . $upfile['name'])) {
             maintop($l['TOP_UPLOAD']);
@@ -453,7 +442,7 @@ function del($dename)
             . "<p class='error'>\n"
             . $l['DEL_MSG1'] . "</p>\n"
             . "<p>" . str_replace('%1', "[ <span style='color:#c00;'>" . $folder . $dename . "</span> ]", $l['DEL_MSG2']) . "</p>\n"
-            . "<a href='" . $config['adminfile'] . "?op=delete&dename=" . urlencode($dename). "&folder=$folder' class='button'>" . $l['YES'] . "</a>\n"
+            . "<a href='" . $config['adminfile'] . "?op=delete&dename=" . urlencode($dename) . "&folder=$folder' class='button'>" . $l['YES'] . "</a>\n"
             . "<a href='" . $config['adminfile'] . "?op=home&folder=$folder' class='button'>" . $l['NO'] . "</a>\n";
         mainbottom();
     } else {
@@ -468,11 +457,11 @@ function del($dename)
 /****************************************************************/
 function search()
 {
-    global $filefolder, $config, $l;
+    global $fileFolder, $config, $l;
     maintop($l['BT_SEARCH']);
     // == load data
     if (!isset($_REQUEST['folder']) || trim($_REQUEST['folder']) == '')
-        $folder = $filefolder;
+        $folder = $fileFolder;
     else
         $folder = trim($_REQUEST['folder']);
     $query      = (isset($_REQUEST['query'])) ? trim(stripslashes($_REQUEST['query'])) : '';
@@ -500,7 +489,7 @@ function search()
         $a_ext       = ($extensions != '*') ? explode(',', $extensions) : $extensions;
         $b_sensitive = ($sensitive == 'on') ? '' : 'i';
         if (substr($folder, -1) == '/') $folder = substr($folder, 0, -1);
-        $output  = _scanDirectory(_2preg($query, $b_sensitive, $where), $a_ext, $where, opendir($folder), $folder, basename($folder), '');
+        _scanDirectory(_2preg($query, $b_sensitive, $where), $a_ext, $where, opendir($folder), $folder, basename($folder), '');
         $n_found = count($config['SEARCH']['a_found']);
         echo "<h3>" . $l['SCH_TIT2'] . " &nbsp; &rarr; <span style='color:#c00;'>" . $n_found . "</span> / " . $config['SEARCH']['scanned_files'] . "</h3>\n";
         echo "<div class='list_dir'>\n";
@@ -534,7 +523,7 @@ function search()
 /****************************************************************/
 function delete($dename)
 {
-    global $folder, $config, $l;
+    global $folder, $l;
     if (!$dename == "") {
         maintop($l['TOP_DELETE']);
         echo "<p>";
@@ -662,19 +651,19 @@ function save($ncontent, $fename)
 /****************************************************************/
 function cr()
 {
-    global $folder, $content, $filefolder, $config, $l;
+    global $folder, $content, $fileFolder, $config, $l;
     maintop($l['TOP_CREATE']);
     if (!$content == "") {
         echo "<br /><br />" . $l['CR_MSG1'] . ".\n";
     }
-    $perm = substr(sprintf('%o', fileperms($filefolder)), -3);
+    $perm = substr(sprintf('%o', fileperms($fileFolder)), -3);
     echo "<form action=\"" . $config['adminfile'] . "?op=create\" method=\"post\">\n";
     echo "<input type=\"radio\" size=\"20\" name=\"isfolder\" value=\"0\" checked> " . $l['CR_FILE'] . "<br />\n"
         . "<input type=\"radio\" size=\"20\" name=\"isfolder\" value=\"1\"> " . $l['CR_DIRECTORY'] . "<br /><br />\n";
     echo $l['CR_FILENAME'] . ": <br /><input type=\"text\" size=\"20\" name=\"nfname\" class=\"text\"><br /><br />\n"
         . $l['CR_DESTINATION'] . ":<br /><select name='ndir' style='width:400px;'>\n"
-        . "<option value=\"" . $filefolder . "\">[$perm] " . $filefolder . "</option>";
-    listdir($filefolder);
+        . "<option value=\"" . $fileFolder . "\">[$perm] " . $fileFolder . "</option>";
+    listdir($fileFolder);
     echo "</select><br /><br />\n"
         . "<input type=\"hidden\" name=\"folder\" value=\"$folder\">\n"
         . "<input type=\"submit\" value=\"" . $l['CR_BT'] . "\" >\n"
@@ -753,7 +742,7 @@ function ren($file)
 /****************************************************************/
 function renam($rename, $nrename, $folder)
 {
-    global $folder, $config, $l;
+    global $folder, $l;
     if (!$rename == "") {
         maintop($l['TOP_RENAME']);
         $loc1 = "$folder" . $rename;
@@ -783,7 +772,6 @@ function renam($rename, $nrename, $folder)
 /****************************************************************/
 function listdir($dir, $level_count = 0)
 {
-    global $config, $l;
     if (!@($thisdir = opendir($dir))) {
         return;
     }
@@ -803,7 +791,7 @@ function listdir($dir, $level_count = 0)
 
 function a_listdir($dir, $onclick)
 {
-    global $filefolder, $config, $l;
+    global $fileFolder, $l;
     if (!@($thisdir = opendir($dir))) {
         return;
     }
@@ -817,7 +805,7 @@ function a_listdir($dir, $onclick)
         foreach ($ex as $p) {
             if ($p == $current || $p == '') continue;
             $realpath .= $p . '/';
-            if (strpos($realpath, $filefolder) !== false) // $filefolder is the folder which the user has permission to access
+            if (strpos($realpath, $fileFolder) !== false) // $filefolder is the folder which the user has permission to access
                 $dir_list[] = "<a href='#' onclick=\"" . $onclick . "('" . $realpath . "')\">" . $realpath . "</a>\n";
         }
     }
@@ -849,7 +837,7 @@ function a_listdir($dir, $onclick)
 /****************************************************************/
 function mov($file)
 {
-    global $folder, $content, $filefolder, $config, $l;
+    global $folder, $config, $l;
     if (!$file == "") {
         maintop($l['TOP_MOVE']);
         echo "<form action=\"" . $config['adminfile'] . "?op=move\" method=\"post\">\n"
@@ -880,7 +868,7 @@ function mov($file)
 /****************************************************************/
 function move($file, $ndir, $folder)
 {
-    global $folder, $config, $l;
+    global $folder, $l;
     if (!$file == "") {
         maintop($l['TOP_MOVE']);
         if (@rename($folder . $file, $ndir . $file)) {
@@ -903,7 +891,7 @@ function move($file, $ndir, $folder)
 /****************************************************************/
 function logout()
 {
-    global $login, $config, $l;
+    global $config, $l;
     setcookie("user", "", time() - 60 * 60 * 24 * 1);
     setcookie("pass", "", time() - 60 * 60 * 24 * 1);
 
@@ -945,7 +933,7 @@ function mainbottom()
 /****************************************************************/
 function printerror($error)
 {
-    global $config, $l;
+    global $l;
     maintop($l['TOP_ERROR']);
     echo "<font class=error>\n" . $error . "\n</font>";
     mainbottom();
@@ -1058,9 +1046,9 @@ function _get_dir_size($dir_name)
                     }
                 }
             }
+            closedir($dh);
         }
     }
-    closedir($dh);
     return $dir_size;
 }
 
@@ -1105,7 +1093,6 @@ function _scanDirectory($needle, $a_ext = '*', $where = 'filename', $dirid, $dir
                 $newpath    = $path . '/' . $file;
                 _scanDirectory($needle, $a_ext, $where, $dirid_next, $dirname_full, $newpath, $spaces);
                 closedir($dirid_next);
-                $dirname_here = '';
             } else {
                 if ($where == 'filecontent') {
                     $b_analyze = false;
@@ -1140,5 +1127,3 @@ function _scanDirectory($needle, $a_ext = '*', $where = 'filename', $dirid, $dir
     }
     return;
 }
-
-?>

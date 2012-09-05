@@ -1,9 +1,5 @@
 <?php
-
-global $config,$l;
-
 $config['a_lang']['es']='castellano';
-
 $l['SITETITLE'] = "Administrador de archivos";
 $l['YES'] = 'Sí';
 $l['NO'] = 'No';
@@ -88,6 +84,3 @@ $l['SCH_BT'] = 'buscar ahora';
 $l['SCH_TIT2'] = 'Resultados de búsqueda';
 $l['SCH_CASE'] = 'diferenciar mayúsculas/minúsculas: ';
 $l['AVAILABLE_SKINS'] = 'Temas disponibles: ';
-
-
-?>
