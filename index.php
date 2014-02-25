@@ -60,7 +60,7 @@ $skins_dir = dirname(__FILE__) . '/skins';
 
 // == list of templates
 if (isset($_COOKIE['a_skins'])) {
-    $config['a_skins'] = unserialize($_COOKIE['a_skins']);
+    $config['a_skins'] = unserialize(stripslashes($_COOKIE['a_skins']));
 } else {
     // reset list
     $config['a_skins'] = array();
@@ -91,7 +91,7 @@ $lang_dir = dirname(__FILE__) . '/languages';
 
 // == list of languages
 if (isset($_COOKIE['a_lang'])) {
-    $config['a_lang'] = unserialize($_COOKIE['a_lang']);
+    $config['a_lang'] = unserialize(stripslashes($_COOKIE['a_lang']));
 } else {
     // reset list
     $config['a_lang'] = array();
@@ -160,7 +160,16 @@ $fileFolder = $config['a_users'][$user]['filefolder'];
 if ($folder == '') {
     $folder = $fileFolder;
 } elseif ($fileFolder != '') {
+    // == check that the path of the folder requested CONTAIN the user filefolder
     if (!preg_match(_2preg($fileFolder), $folder)) {
+        $folder = $fileFolder;
+    }
+    // == check that the path of the folder requested doesn't CONTAIN more '../' than the user filefolder
+    preg_match_all('/\.\.\//',$folder,$matches1);
+        $n_backdots_folder = count($matches1[0]);
+    preg_match_all('/\.\.\//',$fileFolder,$matches2);
+        $n_backdots_filefolder = count($matches2[0]);
+    if ($n_backdots_folder > $n_backdots_filefolder){
         $folder = $fileFolder;
     }
 }
