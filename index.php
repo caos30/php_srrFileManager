@@ -45,7 +45,7 @@ error_reporting(E_ALL);
 
 // users list:
 $config                     = array();
-$config['version']          = '1.2';
+$config['version']          = '1.3';
 $config['a_users']          = array();
 $config['a_users']['admin'] = array('user'=> 'admin', 'pass'=> '1234', 'filefolder'=> '../');
 
@@ -489,8 +489,8 @@ function search()
     echo "<div>" . $l['SCH_QRY'] . " <input type='text' name='query' id='query' value=\"" . htmlspecialchars($query) . "\"  style='width:300px;' /> &nbsp; "
         . $l['SCH_CASE'] . " <input type='checkbox' name='sensitive' " . (($sensitive == 'on') ? "checked='checked'" : "") . " /></div>";
     echo "<div>" . $l['SCH_WHERE']
-        . " <p style='margin-left:50px;'><input type='radio' name='where' id='where_1' value='filename' " . (($where == 'filename' or $where == '') ? "checked='true'" : '') . "  />" . $l['SCH_W1'] . "</p>\n"
-        . " <p style='margin-left:50px;'><input type='radio' name='where' id='where_2' value='filecontent' " . (($where == 'filecontent') ? "checked='true'" : '') . "  />" . $l['SCH_W2']
+        . " <p style='margin-left:50px;display:none;'><input type='radio' name='where' id='where_1' value='filename' " . (($where == 'filename' or $where == '') ? "checked='true'" : '') . "  />" . $l['SCH_W1'] . "</p>\n"
+        . " <p style='margin-left:50px;'><input type='radio' name='where' id='where_2' value='filecontent' checked='true' />" . $l['SCH_W2']
         . " <input type='text' name='extensions' id='extensions' value=\"" . htmlspecialchars($extensions) . "\"  style='width:200px;' /></p>\n"
         . "</div>";
     echo "<div><br /><input type='submit' value=\"" . htmlspecialchars($l['SCH_BT']) . "\" onclick=\"if (document.getElementById('query').value=='') return false;\" /></div>";

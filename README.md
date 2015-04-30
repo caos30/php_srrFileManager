@@ -67,6 +67,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 - As developers & translators: 
  + Sergi Rodrigues (from 2009)
  + Daniel Schlichtholz (from Aug 2012)
+ + kaaboaye (from Apr 2015)
 
 
 == VERSIONS LOG ==
@@ -91,3 +92,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  + the translations are now defined within an array instead to be defined as PHP constants
  + extracted the css styles from the main PHP file to the folder "skins"
  + renamed the main PHP script ("srrFileManager.php") to "index.php"
+
+== 1.3 [2015-04-29]
+
+ + added the polish translation
+ + bugfixed the management of available languages in the frontend
+ + improved some minor issues in CSS 
