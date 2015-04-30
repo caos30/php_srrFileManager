@@ -90,36 +90,38 @@ $l        = array(); // for store translations
 $lang_dir = dirname(__FILE__) . '/languages';
 
 // == list of languages
-if (isset($_COOKIE['a_lang'])) {
-    $config['a_lang'] = unserialize(stripslashes($_COOKIE['a_lang']));
-} else {
-    // reset list
-    $config['a_lang'] = array();
-    // scan folder with translations
-    $dh = opendir($lang_dir);
-    while (($file = readdir($dh)) != false) {
-        if ($file != '.' && $file != '..' && $file != 'en.php') {
-            include_once($lang_dir . '/' . $file);
+    if (isset($_COOKIE['a_lang']) && !isset($_GET['lang'])) {
+        $config['a_lang'] = unserialize(stripslashes($_COOKIE['a_lang']));
+    } else {
+        // reset list
+        $config['a_lang'] = array();
+        // scan folder with translations
+        $dh = opendir($lang_dir);
+        while (($file = readdir($dh)) != false) {
+            if ($file != '.' && $file != '..') {
+                include_once($lang_dir . '/' . $file);
+            }
         }
+        // store at cookie
+        setcookie('a_lang', serialize($config['a_lang']), time() + 3600 * 24 * 365);
     }
-    // load the english translation (default language)
-    include_once($lang_dir . '/en.php');
-    // store at cookie
-    setcookie('a_lang', serialize($config['a_lang']), time() + 3600 * 24 * 365);
-}
-asort($config['a_lang']);
+    asort($config['a_lang']);
 
 // == decide the language for this thread
-$lang = (isset($_COOKIE['lang']) && isset($config['a_lang'][$_COOKIE['lang']])) ? $_COOKIE['lang'] : 'en';
-if (isset($_GET['lang']) && isset($config['a_lang'][trim($_GET['lang'])])) {
-    $lang = trim($_GET['lang']);
-    setcookie('lang', $lang, time() + 100000000000);
-}
+    if (isset($_GET['lang']) && isset($config['a_lang'][$_GET['lang']]))
+        $lang = $_GET['lang'];
+    else if (isset($_COOKIE['lang']) && isset($config['a_lang'][$_COOKIE['lang']]))
+        $lang =  $_COOKIE['lang'];
+    else
+        $lang =  'en';
+    
+    // == save the lang at a cookie
+        if (!isset($_COOKIE['lang']) || $_COOKIE['lang']!=$lang) {
+            setcookie('lang', $lang, time() + 100000000000);
+        }
 
 // == load language translations
-if (!isset($l['SITETITLE']) || $lang != 'en') {
-    include_once($lang_dir . '/' . $lang . '.php');
-}
+    include($lang_dir . '/' . $lang . '.php');
 
 /****************************************************************/
 /* User identification                                          */
@@ -228,13 +230,13 @@ function login($er = false)
         echo "<span class='error'>" . $l['LOGIN_ERR'] . "</span><br /><br />\n";
     }
 
-    echo "<hr /><form action=\"" . $config['adminfile'] . "?op=" . $op . "\" method=\"post\">\n"
+    echo "<hr /><form id='login_form' action=\"" . $config['adminfile'] . "?op=" . $op . "\" method=\"post\">\n"
         . "<table id='tb_login'>\n"
         . "<tr><td class='a_r' style='width:40%;'>" . $l['LOGIN_USERNAME'] . ":</td>"
         . "	<td class='a_l'><input type='text' name='user' value=\"" . ((isset($_REQUEST['user'])) ? htmlspecialchars($_REQUEST['user']) : "") . "\"></td></tr>\n"
         . "<tr><td class='a_r'>" . $l['LOGIN_PASSW'] . ": </td>\n"
         . "	<td class='a_l'><input type='password' name='pass' value=\"" . ((isset($_REQUEST['pass'])) ? htmlspecialchars($_REQUEST['pass']) : "") . "\"></td></tr>\n"
-        . "<tr><td>&nbsp;</td><td class='a_l'><br /><input type='submit' name='submitButtonName' value=\"" . htmlspecialchars($l['LOGIN_BT']) . "\"></td></tr>\n"
+        . "<tr><td>&nbsp;</td><td class='a_l'><br /><a href='#' class='button' onclick=\"document.getElementById('login_form').submit();return false;\">" . htmlspecialchars($l['LOGIN_BT']) . "</a></td></tr>\n"
         . "</table>\n"
         . "</form>\n";
     mainbottom();
@@ -394,14 +396,14 @@ function up()
     global $fileFolder, $config, $l;
     maintop($l['TOP_UPLOAD']);
     $perm = substr(sprintf('%o', fileperms($fileFolder)), -3);
-    echo "<FORM ENCTYPE=\"multipart/form-data\" ACTION=\"" . $config['adminfile'] . "?op=upload\" METHOD=\"POST\">\n"
+    echo "<FORM id='upload_form' ENCTYPE=\"multipart/form-data\" ACTION=\"" . $config['adminfile'] . "?op=upload\" METHOD=\"POST\">\n"
         . "<font face=\"tahoma\" size=\"2\"><b>" . $l['CR_FILE'] . ":</b></font><br /><input type=\"File\" name=\"upfile\" size=\"20\" class=\"text\">\n"
 
         . "<br /><br />" . $l['UP_DESTINATION'] . ":<br /><select name='ndir' style='width:400px;'>\n"
         . "<option value=\"" . $fileFolder . "\">[$perm] " . $fileFolder . "</option>";
     listdir($fileFolder);
     echo "</select><br /><br />"
-        . "<input type=\"submit\" value=\"" . $l['UP_BT'] . "\" >\n"
+        . "<a href='#' class='button' onclick=\"document.getElementById('upload_form').submit();\">" . $l['UP_BT'] . "</a>\n"
         . "</form>\n";
 
     mainbottom();

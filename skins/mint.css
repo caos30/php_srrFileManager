@@ -5,29 +5,30 @@
     Description:
         be a light theme, in honour of Linux Mint ;)
 */
-
-body {color: #444; font-size:11px; font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; scrollbar-base-color: #a6a6a6; MARGIN: 0px 0px 10px; BACKGROUND-COLOR: #ffffff}
+html,body{ width:100%;}
+body {color: #444; font-size:11px; font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; scrollbar-base-color: #a6a6a6; MARGIN: 0px 0px 10px; BACKGROUND-COLOR: #ffffff;text-align:center;}
+* {border-radius:3px;}
 p, td, a, span {font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;}
 a {color:#8b8;text-decoration:none;}
 a:hover {color:#333;}
 hr{color:#ccd;height:1px;border:0px;border-bottom:2px #ccd solid;margin:17px 0px;}
 
+input,textArea,select{ padding:2px 4px;border:1px #ddd solid;background-color:#eee;margin:3px; }
 .copyright {font-size:10px; color: #000000; text-align: left;}
 .error {font-size:10px; color: #AA2222;}
 
-#wrapper{position:relative;width:750px;margin:11px auto;border:2px #eee solid;padding:15px;-webkit-border-radius: 3px;-moz-border-radius: 3px;}
+#wrapper{position:relative;display:inline-block;min-width:750px;margin:11px auto;border:2px #eee solid;padding:15px;text-align:left;border-radius: 3px;}
 h1{margin:0px 0px 7px 0px;font-size:18px;color:#555;}
+
 #languages{text-align:right;}
-#languages a, .button{display:inline-block;padding:2px 4px;border:1px #ddd solid;background-color:#eee;margin:3px;}
+#languages a, .button{display:inline-block;padding:2px 4px;border:1px #ddd solid;background-color:#eee;margin:3px; font-weight:bold;}
+#languages a:hover, .button:hover, #top_menu a:hover{ box-shadow:0px 0px 3px #555;}
+
 #tb_login{width:100%;}
 #top_menu{border-top:2px #cdc solid;border-bottom:2px #cdc solid;margin:15px 0px;}
 #top_menu a{display:inline-block;padding:2px 6px;margin:3px;background-color:#cdc;color:#222;border:1px #aca solid;font-weight:bold;
                 letter-spacing:1px;
                 -webkit-border-radius: 3px;-moz-border-radius: 3px;}
--moz-border-radius-topleft: 4px;
-border-top-left-radius: 4px;
--moz-border-radius-topright: 50px;		
-border-top-right-radius: 50px;
 
 #top_menu a:hover{background-color:#ded;}
 
@@ -45,7 +46,7 @@ td { font-size : 80%;font-family : Tahoma, Verdana, Arial, Helvetica, sans-serif
 .breadcrumb em{color:#c00;font-style:normal;}
 .breadcrumb a{display:inline-block;padding:2px 4px;border:1px #ddd solid;background-color:#eee;}
 
-#tb_list{width:100%;}
+#tb_list{}
 #tb_list th{background-color:#eee;color:#555;font-weight:bold;font-size:12px;padding:5px;}
 #tb_list td{padding:1px 3px;font-weight:normal;}
 #tb_list td a{display:inline-block;padding:2px 6px;margin:3px;background-color:#efe;color:#222;border:1px #ded solid;font-size:12px;

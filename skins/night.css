@@ -6,7 +6,9 @@
         be a dark theme, for economize energy 
 */
 
-body {color: #ccc; font-size:11px; font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; scrollbar-base-color: #a6a6a6; MARGIN: 0px 0px 10px; background-color: #001;}
+html,body{ width:100%;}
+body {color: #ccc; font-size:11px; font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif; scrollbar-base-color: #a6a6a6; MARGIN: 0px 0px 10px; background-color: #001;text-align:center;}
+* {border-radius:3px;}
 .copyright {font-size:10px; text-align: left;}
 
 p, td, a, span {font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;}
@@ -14,13 +16,16 @@ a {color:#aad;text-decoration:none;}
 a:hover {color:#ccf;}
 h1{margin:0px 0px 7px 0px;font-size:18px;color:#aaa;}
 hr{color:#445;height:1px;border:0px;border-bottom:2px #445 solid;margin:17px 0px;}
+
 textarea,input,select{background-color:#445;color:#cce;border-color:#666;border-width:1px; padding:3px;}
 
 .error {color: #e88;}
 
-#wrapper{position:relative;width:750px;margin:11px auto;border:2px #334 solid;padding:15px;-webkit-border-radius: 3px;-moz-border-radius: 3px;}
+#wrapper{position:relative;display:inline-block;float:center;margin:11px auto;border:2px #334 solid;padding:15px;text-align:left;border-radius: 3px;}
 #languages{text-align:right;}
 #languages a, .button{display:inline-block;padding:2px 4px;border:1px #555 solid;background-color:#334;margin:3px;}
+#languages a:hover, .button:hover, #top_menu a:hover{ box-shadow:0px 0px 3px #aaf;}
+
 #tb_login{width:100%;}
 #top_menu{border-top:2px #334 solid;border-bottom:2px #334 solid;margin:15px 0px;}
 #top_menu a{display:inline-block;padding:2px 6px;margin:3px;border:1px #555 solid;font-weight:bold;

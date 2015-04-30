@@ -1,5 +1,6 @@
 <?php
 $config['a_lang']['en']='english';
+
 $l['SITETITLE'] = "File manager";
 $l['YES'] = 'Yes';
 $l['NO'] = 'No';
