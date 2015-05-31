@@ -1,4 +1,7 @@
 php_srrFileManager
+
+Polish translation with removed errors
+
 ==================
 
 == DESCRIPTION ==
