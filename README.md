@@ -1,8 +1,6 @@
-======================
-= php_srrFileManager =
-======================
+# [php_srrFileManager](https://github.com/caos30/php_srrFileManager)
 
-== DESCRIPTION ==
+## Description
 
 A simple PHP script of less than 100kb which help you to list, add, edit, move, delete, rename, search, etc files and directories. It doesn't need a database, so it's fast to "install" and use :)
 
@@ -15,42 +13,46 @@ It contain several languages interface:
 
 It contain two skins for style displaying: mint, night.
 
+## Screenshot
 
-== INSTALLATION ==
+![screenshot](/screenshot.gif?raw=true "Main panel")
 
-1. Simply create a folder within the directory that you wants to "explore" and put inside these files
+## Installation
 
-2. edit the a_users array in the $config variable for specify a username, password and "filefolder" (read below before use it)
+1. As simple as to create a folder within the directory that you wants to "explore" and put inside these files
 
+2. edit the a_users array in the $config variable (within index.php) for specify a username, password and "filefolder" (read below before use it)
 
-== USERS & FOLDERS ==
+Note: in the downloaded package you will find the directory "tmp" which is only for development purpose, so it is not necesary for the script, and you can delete it.
 
-- in the array a_users you can add as users as you need
+## Users & folders
+
+- in the array a_users (index.php) you can add so many users as you need
 - each one has permission to access to the files/directories contained under the "filefolder" directory that you specify for them
 - this "filefolder" usually take the value: ../ (will give access to the parent directory to the container of this script)
 - so, briefly: the "filefolder" is a RELATIVE path !
 
-- Note: in the downloaded package you will find the directory "tmp" which is only for development purpose, so it is not necesary for the script, and you can delete it.
+```
+$config['a_users'] = array();
+$config['a_users']['admin'] = array('user'=> 'admin', 'pass'=> '1234', 'filefolder'=> '../');
+```
 
+## Problems
 
-== PROBLEMS ==
+If you have problems for move, edit, upload, etc... probably is due to a problem with permissions:
 
-- if you have problems for move, edit, upload, etc... probably is due to a problem with permissions:
+ - perhaps the owner of the script is not the necesary for read/write the files
+ - or perhaps the files you need read/write has quite low permissions, so you must to increase it
 
- + perhaps the owner of the script is not the necesary for read/write the files
- + or perhaps the files you need read/write has quite low permissions, so you must to increase it
+## Security
 
+This tool is very dangerous for be accessed by bad people, so although it use cookies for login, it's recommendable that you take one of these measures:
 
-== SECURITY ==
+ - if you can, it's better (very recommendable!) that you access the script using SSL certificate (https://)
+ - upload this script only when you need it and after delete it
+ - possibly the best option is this: put the script inside a directory protected with user/password through Apache directory protection
 
-- this tool is very dangerous for be accessed by bad people, so although it use cookies for login, it's recommendable that you take one of these measures:
-
- + if you can is better that you access the script using SSL certificate (https://)
- + upload this script only when you need it and after delete it
- + possibly the best option is this: put the script inside a directory protected with user/password through Apache directory protection
-
-
-== LICENSE ==
+## License
 
 LICENSE: GPL v2
 
@@ -68,18 +70,16 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
+## Team
 
-== TEAM ==
+As developers & translators: 
 
-- As developers & translators: 
- + Sergi Rodrigues (from 2009)
- + Daniel Schlichtholz (from Aug 2012)
- + kaaboaye (from Apr 2015)
+ - Sergi Rodrigues (from 2009)
+ - Daniel Schlichtholz (from Aug 2012)
+ - kaaboaye (from Apr 2015)
 
 
-== VERSIONS LOG ==
-
- + see more details at: https://github.com/caos30/php_srrFileManager
+## Versions Log
 
 == 1.0 [2012-08-14]
 
@@ -105,3 +105,5 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  + added the polish translation
  + bugfixed the management of available languages in the frontend
  + improved some minor issues in CSS 
+
+More details at: https://github.com/caos30/php_srrFileManager/commits/master
