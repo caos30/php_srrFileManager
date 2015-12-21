@@ -2,7 +2,17 @@
 
 ## Description
 
-A simple PHP script of less than 100kb which help you to list, add, edit, move, delete, rename, search, etc files and directories. It doesn't need a database, so it's fast to "install" and use :)
+A simple PHP script of less than 100kb which help you to:
+- list
+- add
+- edit
+- move
+- delete
+- rename
+- search
+- zip/unzip
+
+files and directories. It doesn't need a database, so it's fast to "install" and use :)
 
 It contain several languages interface: 
  - english
@@ -15,7 +25,7 @@ It contain two skins for style displaying: mint, night.
 
 ## Screenshot
 
-![screenshot](/screenshot.gif?raw=true "Main panel")
+![screenshot](/screenshot.gif?raw=true "Main panel (version 1.3)")
 
 ## Installation
 
@@ -79,6 +89,12 @@ As developers & translators:
  - kaaboaye (from Apr 2015)
 
 
+## To do
+
+ - list the content of a ZIP file
+ - alert when the unzip operation will overwrite existing folders/files !! By now they are simply overwritten :(
+ - add the ability of use checkboxes for select several files/directories for apply to them the SAME operation (move/delete/zip/etc..)
+
 ## Versions Log
 
 == 1.0 [2012-08-14]
@@ -105,5 +121,9 @@ As developers & translators:
  + added the polish translation
  + bugfixed the management of available languages in the frontend
  + improved some minor issues in CSS 
+
+== 1.4 [2015-12-20]
+
+ + added the ability of zip/unzip files/directories
 
 More details at: https://github.com/caos30/php_srrFileManager/commits/master

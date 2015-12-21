@@ -45,7 +45,7 @@ error_reporting(E_ALL);
 
 // users list:
 $config                     = array();
-$config['version']          = '1.3';
+$config['version']          = '1.4';
 $config['a_users']          = array();
 $config['a_users']['admin'] = array('user'=> 'admin', 'pass'=> '1234', 'filefolder'=> '../');
 
@@ -275,8 +275,8 @@ function home()
                     $content1[strtolower($file)] = "<td><a href=\"" . $config['adminfile'] . "?op=home&folder=" . $folder . $file . "/\" class='a_folder'>" . $sfile . "</a></td>\n"
                         . "<td align=\"center\">" . $perm . "</td>\n"
                         . "<td align=\"right\" style='letter-spacing:nowrap;' nowrap></td>\n"
-                        . "<td align=\"left\" colspan='5'>" . $l['HOME_MSG1'] . "</td></tr>\n"
-                        . "<tr height=\"2\"><td height=\"2\" colspan=\"8\">\n";
+                        . "<td align=\"left\" colspan='6'>" . $l['HOME_MSG1'] . "</td></tr>\n"
+                        . "<tr height=\"2\"><td height=\"2\" colspan=\"9\">\n";
                 } else {
                     $n_size                      = filesize($folder . $file); //_get_dir_size($folder.$file);
                     $content1[strtolower($file)] = "<td><a href=\"" . $config['adminfile'] . "?op=home&folder=" . $folder . $file . "/\" class='a_folder'>" . $sfile . "</a></td>\n"
@@ -286,7 +286,9 @@ function home()
                         . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=ren&file=" . $file . "&folder=$folder\">" . $l['HOME_BT_RENAME'] . "</a></td>\n"
                         . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=del&dename=" . $file . "&folder=$folder\">" . $l['HOME_BT_DELETE'] . "</a></td>\n"
                         . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=mov&file=" . $file . "&folder=$folder\">" . $l['HOME_BT_MOVE'] . "</a></td>\n"
-                        . "<td align=\"center\"></td></tr><tr height=\"2\"><td height=\"2\" colspan=\"8\">\n";
+                        . "<td align=\"center\">&nbsp;</td>\n"
+                        . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=zip&file=" . $file . "&folder=$folder\">" . $l['HOME_BT_COMPRESS'] . "</a></td>\n"
+                        . "</tr><tr height=\"2\"><td height=\"2\" colspan=\"9\">\n";
                 }
                 $a++;
 
@@ -295,8 +297,8 @@ function home()
                     $content2[strtolower($file)] = "<td>" . $sfile . "</td>\n"
                         . "<td align=\"center\">" . $perm . "</td>\n"
                         . "<td align=\"right\" style='letter-spacing:nowrap;' nowrap></td>\n"
-                        . "<td align=\"left\" colspan='5'>" . $l['HOME_MSG2'] . "</td></tr>\n"
-                        . "<tr height=\"2\"><td height=\"2\" colspan=\"8\">\n";
+                        . "<td align=\"left\" colspan='6'>" . $l['HOME_MSG2'] . "</td></tr>\n"
+                        . "<tr height=\"2\"><td height=\"2\" colspan=\"9\">\n";
                 } else {
                     $n_size                      = filesize($folder . $file);
                     $content2[strtolower($file)] = "<td>" . $sfile . "</td>\n"
@@ -306,8 +308,11 @@ function home()
                         . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=ren&file=" . $file . "&folder=$folder\">" . $l['HOME_BT_RENAME'] . "</a></td>\n"
                         . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=del&dename=" . $file . "&folder=$folder\">" . $l['HOME_BT_DELETE'] . "</a></td>\n"
                         . "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=mov&file=" . $file . "&folder=$folder\">" . $l['HOME_BT_MOVE'] . "</a></td>\n"
-                        . "<td align=\"center\"><a href=\"" . $folder . $file . "\" target='_blank'>" . $l['HOME_BT_VIEW'] . "</a></td></tr>\n"
-                        . "<tr height=\"2\"><td height=\"2\" colspan=\"8\">\n";
+                        . "<td align=\"center\"><a href=\"" . $folder . $file . "\" target='_blank'>" . $l['HOME_BT_VIEW'] . "</a></td>\n"
+                        .(strtolower(substr($file,-4))=='.zip' ?
+                        "<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=unzip&file=" . $file . "&folder=$folder\">" . $l['HOME_BT_DECOMPRESS'] . "</a></td>\n"
+                        :"<td align=\"center\"><a href=\"" . $config['adminfile'] . "?op=zip&file=" . $file . "&folder=$folder\">" . $l['HOME_BT_COMPRESS'] . "</a></td>\n")
+                        . "</tr><tr height=\"2\"><td height=\"2\" colspan=\"9\">\n";
                 }
                 $b++;
 
@@ -321,10 +326,18 @@ function home()
     if (is_array($content2))
         ksort($content2);
 
+    // = message to user
+        if (!empty($config['msg'])){
+            echo $config['msg']."<hr />";
+        }
+        
+    // = breadcrumb & number of files
     echo "<div class='breadcrumb'>\n"
         . $l['HOME_LAB_BROWS'] . ": <span>" . breadcrumb($folder) . "</span>\n"
         . "<br />" . $l['HOME_LAB_NUM'] . ": <em>" . $count . "</em>\n"
         . "</div>";
+    
+    // = file list
     echo "<table id='tb_list' cellspacing='0'><thead><tr>"
         . "<th>" . $l['HOME_LAB_FILE'] . "\n"
         . "<th style='text-align:center;'>" . $l['HOME_LAB_PERM'] . "</th>\n"
@@ -334,6 +347,7 @@ function home()
         . "<th align=\"center\" style='width:57px;'>&nbsp;</th>\n"
         . "<th align=\"center\" style='width:40px;'>&nbsp;</th>\n"
         . "<th align=\"center\" style='width:44px;'>&nbsp;</th>\n"
+        . "<th align=\"center\" style='width:57px;'>&nbsp;</th>\n"
         . "</tr></thead><tbody>\n";
 
     $j = 1;
@@ -534,10 +548,8 @@ function search()
 /****************************************************************/
 function delete($dename)
 {
-    global $folder, $l;
+    global $folder, $l, $config;
     if (!$dename == "") {
-        maintop($l['TOP_DELETE']);
-        echo "<p>";
         if (is_dir($folder . $dename)) {
             if (_rmdir($folder . $dename))
                 $msg = $l['DEL_MSG3'];
@@ -549,10 +561,67 @@ function delete($dename)
             else
                 $msg = $l['DEL_MSG5'];
         }
-        echo "<div class='breadcrumb'>" . str_replace('%1', "[ <span style='color:#c00;'>" . breadcrumb($folder) . " / " . $dename . "</span> ]", $msg) . "</div>";
-        mainbottom();
-    } else {
-        home();
+        $config['msg'] = "<div class='breadcrumb'>" . str_replace('%1', "[ <span style='color:#c00;'>" . breadcrumb($folder) . " / " . $dename . "</span> ]", $msg) . "</div>";
+    }
+    home();
+}
+
+/****************************************************************/
+/* function zip()                                               */
+/*                                                              */
+/* Compress a file/directory in a unique step.                  */
+/*                                                              */
+/****************************************************************/
+function zip($filename)
+{
+    global $folder, $l, $config;
+    if (!$filename == "") {
+        // = path to zip
+            $path_to_zip = $folder.$filename;
+        // = destination file
+            $zip_filename = $folder.$filename.'.zip';
+            if (file_exists($zip_filename))
+                $zip_filename = $folder.$filename.'.'.time().'.zip';
+        // = zip it
+            $res = _zip($path_to_zip,$zip_filename);
+            if ($res === false){
+               $msg = $l['ZIP_MSG3']; 
+            }else if (is_dir($path_to_zip)){
+               $msg = $l['ZIP_MSG2']; 
+            }else{
+               $msg = $l['ZIP_MSG1']; 
+            }
+        // = render answer
+            $config['msg'] = "<div class='breadcrumb'>" . str_replace(
+                    array('%1','%2'),
+                    array("[ <span style='color:#c00;'>" . breadcrumb($folder) . " / " . $filename . "</span> ]"," <a href='".$zip_filename."' target='_blank'>".str_replace($folder,'',$zip_filename)."</a>"),
+                    $msg) . "</div>";
+            home();
+        return;
+    }
+}
+
+/****************************************************************/
+/* function unzip()                                             */
+/*                                                              */
+/* Decompress a ZIP file.                                       */
+/*                                                              */
+/****************************************************************/
+function unzip($filezip)
+{
+    global $folder, $l, $config;
+    if (!$filezip == "") {
+        // = zip it
+            $res = _unzip($folder.$filezip,$folder);
+            if ($res !== true){
+               $msg = $l['UNZIP_MSG2']. "<p>".$res."</p>"; 
+            }else{
+               $msg = $l['UNZIP_MSG1']; 
+            }
+        // = render answer
+            $config['msg'] = "<div class='breadcrumb'>" . str_replace('%1',"[ <span style='color:#c00;'>" . breadcrumb($folder) . " / " . $filezip . "</span> ]",$msg) . "</div>";
+            home();
+        return;
     }
 }
 
@@ -983,6 +1052,14 @@ switch ($op) {
         delete($_REQUEST['dename']);
         break;
 
+    case "zip":
+        zip($_REQUEST['file']);
+        break;
+
+    case "unzip":
+        unzip($_REQUEST['file']);
+        break;
+
     case "edit":
         edit($_REQUEST['fename']);
         break;
@@ -1137,4 +1214,78 @@ function _scanDirectory($needle, $a_ext = '*', $where = 'filename', $dirid, $dir
         }
     }
     return;
+}
+
+/*
+ * high level function for zip (taken from CMS Barllo: f_zip() )
+ */
+function _zip($path_to_zip,$zip_filename){
+    if (!extension_loaded('zip') || (!is_array($path_to_zip) && !file_exists($path_to_zip))) return false;
+
+    $zip = new ZipArchive();
+    if (!$zip->open($zip_filename, ZIPARCHIVE::CREATE)) return false;
+
+    if (!is_array($path_to_zip)){
+        $array_of_paths = array($path_to_zip);
+    }else if (count($path_to_zip)==0){
+        return false;
+    }else{
+        $array_of_paths = $path_to_zip;
+    }
+    
+    foreach($array_of_paths as $path_to_zip){
+        $path_to_zip = str_replace('\\', '/', realpath($path_to_zip));
+        if (is_dir($path_to_zip) === true){
+            $ex = explode('/',$path_to_zip); // $path_to_zip = /foo/bar 
+            $first_folder = $ex[(count($ex)-1)]; // $ex[(count($ex)-1)] = bar
+            $zip->addEmptyDir($first_folder); 
+            $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path_to_zip), RecursiveIteratorIterator::SELF_FIRST);
+            foreach ($files as $file){
+                $file = str_replace('\\', '/', $file);
+
+                // == Ignore "." and ".." folders
+                if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) ) continue;
+
+                $file = realpath($file);
+
+                if (is_dir($file) === true){
+                    $zip->addEmptyDir($first_folder.'/'.str_replace($path_to_zip . '/', '', $file . '/'));
+                }else if (is_file($file) === true){
+                    $zip->addFromString($first_folder.'/'.str_replace($path_to_zip . '/', '', $file), file_get_contents($file));
+                }
+            }
+        }else if (is_file($path_to_zip) === true){
+            $zip->addFromString(basename($path_to_zip), file_get_contents($path_to_zip));
+        }
+    }
+    return $zip->close();
+}
+
+/*
+ * high level function for zip (taken from CMS Barllo: update_repository.php)
+ */
+function _unzip($zipfile,$destination_folder){
+    if (!extension_loaded('zip') || !file_exists($zipfile)) return false;
+
+    $zip_errors = array(
+        '10' => 'ZIPARCHIVE::ER_EXISTS (File already exists)',
+        '21' => 'ZIPARCHIVE::ER_INCONS (Zip archive inconsistent)',
+        '18' => 'ZIPARCHIVE::ER_INVAL',
+        '14' => 'ZIPARCHIVE::ER_MEMORY (Malloc failure)',
+        '9' => 'ZIPARCHIVE::ER_NOENT (No such file)',
+        '19' => 'ZIPARCHIVE::ER_NOZIP (Not a zip archive)',
+        '11' => 'ZIPARCHIVE::ER_OPEN (Cannot open file)',
+        '5' => 'ZIPARCHIVE::ER_READ (Read error)',
+        '4' => 'ZIPARCHIVE::ER_SEEK (Seek error)',
+        );
+
+    $zip = new ZipArchive;
+    $res = $zip->open($zipfile);
+    if ($res !== true) return "Impossible to open the ZIP file: [ ".$zipfile." ]. <br /><br />ERROR: ".$zip_errors[$res].".";
+
+    $res = $zip->extractTo($destination_folder);
+    if ($res !== true) return "Impossible to extract the content of the ZIP file: [ ".$zipfile." ] to [ ".$destination_folder." ]. <br /><br />ERROR: ".$zip_errors[$res].".";
+
+    $zip->close();
+    return true;
 }

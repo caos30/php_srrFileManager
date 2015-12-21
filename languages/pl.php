@@ -85,3 +85,14 @@ $l['SCH_BT'] = 'szukaj';
 $l['SCH_TIT2'] = 'Wyniki wyszukiwania';
 $l['SCH_CASE'] = 'rozróżniaj wielkość liter: ';
 $l['AVAILABLE_SKINS'] = 'Dostępne skórki: ';
+
+/* -- added on version 1.4-- */
+
+$l['TOP_ZIP'] = 'kompresować';
+$l['HOME_BT_COMPRESS'] = 'kompresować';
+$l['HOME_BT_DECOMPRESS'] = 'Dekompresji';
+$l['ZIP_MSG1'] = "The file %1 has been corretly compressed: %2";
+$l['ZIP_MSG2'] = "The directory %1 has been corretly compressed: %2";
+$l['ZIP_MSG3'] = "There was a problem compressing %1";
+$l['UNZIP_MSG1'] = "The file %1 has been successfully decompressed in the same folder.";
+$l['UNZIP_MSG2'] = "There was a problem decompressing %1";

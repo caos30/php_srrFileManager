@@ -84,3 +84,14 @@ $l['SCH_BT'] = 'buscar ahora';
 $l['SCH_TIT2'] = 'Resultados de búsqueda';
 $l['SCH_CASE'] = 'diferenciar mayúsculas/minúsculas: ';
 $l['AVAILABLE_SKINS'] = 'Temas disponibles: ';
+
+/* -- added on version 1.4-- */
+
+$l['TOP_ZIP'] = 'Comprimir';
+$l['HOME_BT_COMPRESS'] = 'Comprimir';
+$l['HOME_BT_DECOMPRESS'] = 'Descomprimir';
+$l['ZIP_MSG1'] = "El archivo %1 ha sido comprimido correctamente: %2";
+$l['ZIP_MSG2'] = "El directorio %1 ha sido comprimido correctamente: %2";
+$l['ZIP_MSG3'] = "Ha habido un problema comprimiendo %1";
+$l['UNZIP_MSG1'] = "El archivo %1 ha sido descomprimido correctamente en esta misma carpeta.";
+$l['UNZIP_MSG2'] = "Ha habido un problema descomprimiendo %1";
