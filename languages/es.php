@@ -95,3 +95,10 @@ $l['ZIP_MSG2'] = "El directorio %1 ha sido comprimido correctamente: %2";
 $l['ZIP_MSG3'] = "Ha habido un problema comprimiendo %1";
 $l['UNZIP_MSG1'] = "El archivo %1 ha sido descomprimido correctamente en esta misma carpeta.";
 $l['UNZIP_MSG2'] = "Ha habido un problema descomprimiendo %1";
+
+/* -- added on version 1.5 -- */
+
+$l['UP_REMOTE_URL'] = "o bien URL de archivo remoto";
+$l['UP_MSG5'] = "La dirección URL del archivo remoto no tiene un formato válido (ha de empezar por <b>http://</b> ó <b>https://</b>).";
+$l['UP_MSG6'] = "Esta dirección URL no es accesible (error 404):";
+$l['UP_MSG7'] = "El archivo %1 <br /><br />ya existe en el directorio %2.<br /><br />Se ha de eliminar antes de reescribirlo.";

@@ -11,8 +11,12 @@ A simple PHP script of less than 100kb which help you to:
 - rename
 - search
 - zip/unzip
+- upload
+- get remote
 
-files and directories. It doesn't need a database, so it's fast to "install" and use :)
+files and directories. Even to get a remote file using its URL (thanks to curl).
+
+It doesn't need a database, so it's fast to "install" and use :)
 
 It contain several languages interface: 
  - english
@@ -33,7 +37,9 @@ It contain two skins for style displaying: mint, night.
 
 2. edit the a_users array in the $config variable (within index.php) for specify a username, password and "filefolder" (read below before use it)
 
-Note: in the downloaded package you will find the directory "tmp" which is only for development purpose, so it is not necesary for the script, and you can delete it.
+Notes: 
+ - in the downloaded package you will find the directory "tmp" which is only for development purpose, so it is not necesary for the script, and you can delete it.
+ - to be able to use CURL php native functions to get remote files hosted in other servers you need to have enabled the curl extension on your PHP
 
 ## Users & folders
 
@@ -125,5 +131,9 @@ As developers & translators:
 == 1.4 [2015-12-20]
 
  + added the ability of zip/unzip files/directories
+
+== 1.5 [2018-12-10]
+
+ + added the ability of get remote URL files (using curl)
 
 More details at: https://github.com/caos30/php_srrFileManager/commits/master

@@ -15,7 +15,9 @@ hr{color:#ccd;height:1px;border:0px;border-bottom:2px #ccd solid;margin:17px 0px
 
 input,textArea,select{ padding:2px 4px;border:1px #ddd solid;background-color:#eee;margin:3px; }
 .copyright {font-size:10px; color: #000000; text-align: left;}
-.error {font-size:10px; color: #AA2222;}
+
+.error {color: #AA2222;}
+.error code{color: #444;}
 
 #wrapper{position:relative;display:inline-block;min-width:750px;margin:11px auto;border:2px #eee solid;padding:15px;text-align:left;border-radius: 3px;}
 h1{margin:0px 0px 7px 0px;font-size:18px;color:#555;}

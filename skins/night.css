@@ -20,6 +20,7 @@ hr{color:#445;height:1px;border:0px;border-bottom:2px #445 solid;margin:17px 0px
 textarea,input,select{background-color:#445;color:#cce;border-color:#666;border-width:1px; padding:3px;}
 
 .error {color: #e88;}
+.error code{color: #aaa;}
 
 #wrapper{position:relative;display:inline-block;float:center;margin:11px auto;border:2px #334 solid;padding:15px;text-align:left;border-radius: 3px;}
 #languages{text-align:right;}

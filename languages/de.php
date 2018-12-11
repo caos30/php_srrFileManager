@@ -96,3 +96,10 @@ $l['ZIP_MSG2'] = "The directory %1 has been corretly compressed: %2";
 $l['ZIP_MSG3'] = "There was a problem compressing %1";
 $l['UNZIP_MSG1'] = "The file %1 has been successfully decompressed in the same folder.";
 $l['UNZIP_MSG2'] = "There was a problem decompressing %1";
+
+/* -- added on version 1.5 -- */
+
+$l['UP_REMOTE_URL'] = "oder Remote-Datei-URL";
+$l['UP_MSG5'] = "Die URL der entfernten Datei hat kein gültiges Format (sie muss mit <b>http://</b> oder <b>https://</b> beginnen).";
+$l['UP_MSG6'] = "Auf diese URL kann nicht zugegriffen werden (Fehler 404):";
+$l['UP_MSG7'] = "Die Datei %1 <br /><br />ist bereits im Verzeichnis %2 vorhanden.<br /><br />Es muss vor dem erneuten Schreiben gelöscht werden.";

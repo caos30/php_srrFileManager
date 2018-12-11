@@ -1,5 +1,4 @@
 <?php
-
 /****************************************************************
 
 srrFileManager - Sergi Rodrigues Rius (October 2009, until now)
@@ -45,7 +44,7 @@ error_reporting(E_ALL);
 
 // users list:
 $config                     = array();
-$config['version']          = '1.4';
+$config['version']          = '1.5';
 $config['a_users']          = array();
 $config['a_users']['admin'] = array('user'=> 'admin', 'pass'=> '1234', 'filefolder'=> '../');
 
@@ -254,8 +253,8 @@ function home()
     global $folder, $config, $l;
     maintop($l['TOP_HOME']);
 
-    $content1 = "";
-    $content2 = "";
+    $content1 = array();
+    $content2 = array();
 
     $count = "0";
     $hf    = opendir($folder);
@@ -411,8 +410,8 @@ function up()
     maintop($l['TOP_UPLOAD']);
     $perm = substr(sprintf('%o', fileperms($fileFolder)), -3);
     echo "<FORM id='upload_form' ENCTYPE=\"multipart/form-data\" ACTION=\"" . $config['adminfile'] . "?op=upload\" METHOD=\"POST\">\n"
-        . "<font face=\"tahoma\" size=\"2\"><b>" . $l['CR_FILE'] . ":</b></font><br /><input type=\"File\" name=\"upfile\" size=\"20\" class=\"text\">\n"
-
+        . "<font face='tahoma' size='2'><b>" . $l['CR_FILE'] . ":</b></font><br /><input type='File' name='upfile' class='text' style='width:99%;' />\n"
+		. "<br /><br /><font face='tahoma' size='2'><b>" . $l['UP_REMOTE_URL'] . ":</b></font><br /><input type='text' name='upurl' placeholder='https://' class='text' style='width:99%;'>\n"
         . "<br /><br />" . $l['UP_DESTINATION'] . ":<br /><select name='ndir' style='width:400px;'>\n"
         . "<option value=\"" . $fileFolder . "\">[$perm] " . $fileFolder . "</option>";
     listdir($fileFolder);
@@ -433,9 +432,36 @@ function up()
 /****************************************************************/
 function upload($upfile, $ndir)
 {
-
     global $l;
-    if (!$upfile) {
+    if (!empty($_POST['upurl'])){
+		$remote_url = trim($_POST['upurl']);
+		if (!preg_match('/^(http:\/\/|https:\/\/)/',$remote_url)){
+			printerror($l['UP_MSG5']);
+		}else{
+			$ex = explode('/',$remote_url);
+			$ex2 = explode('?',$ex[(count($ex)-1)]);
+			$filename = trim($ex2[0]);
+			if ($filename==''){
+				printerror($l['UP_MSG5']);
+			}else if (file_exists($ndir.$filename)){
+				printerror(str_replace(array('%1','%2'),array("[ <code>$filename</code> ]","[ ".breadcrumb($ndir)." ]"),$l['UP_MSG7']));
+			}else{
+				$response_info = _get_remote_file($remote_url,$ndir.$filename);
+				if (!empty($response_info['error'])){
+					printerror($response_info['error']);
+				}else if (isset($response_info['http_code']) && $response_info['http_code']=='404'){
+					@unlink($ndir.$filename);
+					printerror($l['UP_MSG6']."<br /><br /><a href='$remote_url' target='_blank'>$remote_url</a>");
+				}else{
+					@chmod($ndir.$filename, 0777);
+					maintop($l['TOP_UPLOAD']);
+					echo "<div class='breadcrumb'>" . str_replace('%1', "[ <span style='color:#c00;'>" . breadcrumb($ndir) . " / " . $filename . "</span> ]", $l['UP_MSG2'])
+						." (<b>"._size_format(filesize($ndir.$filename))."</b>)."."</div>\n";
+					mainbottom();
+				}
+			}
+		}
+    }else if (!$upfile) {
         printerror($l['UP_MSG1']);
     } elseif ($upfile['name']) {
         if (@copy($upfile['tmp_name'], $ndir . $upfile['name'])) {
@@ -450,6 +476,50 @@ function upload($upfile, $ndir)
     }
 }
 
+function _get_remote_file( $url, $filename, $vars = '') {
+        $url = str_replace( "&amp;", "&", urldecode(trim($url)) );
+        $ch = curl_init();
+
+        curl_setopt( $ch, CURLOPT_URL, $url );
+        //curl_setopt( $ch, CURLOPT_COOKIEJAR, tempnam ("/tmp", "CURLCOOKIE") );
+        curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+        curl_setopt( $ch, CURLOPT_ENCODING, "" );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_AUTOREFERER, true );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );    # required for https urls
+        curl_setopt( $ch, CURLOPT_MAXREDIRS, 10 );
+
+        if (is_array($vars) && !empty($vars['HTTPHEADER']))
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, $vars['HTTPHEADER']);
+
+        if (is_array($vars) && !empty($vars['USERAGENT']))
+            curl_setopt( $ch, CURLOPT_USERAGENT, $vars['USERAGENT']);
+        else
+            curl_setopt( $ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.7.3) Gecko/20041001 Firefox/0.10.1" );
+
+        if (is_array($vars) && !empty($vars['TIMEOUT'])){
+            curl_setopt( $ch, CURLOPT_TIMEOUT, intval($vars['TIMEOUT']) );
+            curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, intval($vars['TIMEOUT']) );
+        }else{
+            curl_setopt( $ch, CURLOPT_TIMEOUT, 600 );
+            curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 600 );
+        }
+
+		if (($fp = fopen($filename, "wb")) === false) return array('error'=>"fopen error for filename $filename.");
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        
+        if (curl_exec($ch) === false) {
+            fclose($fp);
+            unlink($filename);
+            return array('error'=>"curl_exec error for url $url.");
+        }
+		fclose($fp);
+		
+        $response = curl_getinfo( $ch );
+        curl_close ( $ch );
+
+        return $response;
+}
 
 /****************************************************************/
 /* function del()                                               */
